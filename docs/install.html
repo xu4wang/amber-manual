@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>安装与部署 · Amber</title>
+<link rel="icon" href="../logo.svg">
+<script src="../vendor/marked.min.js"></script>
+<script src="../vendor/purify.min.js"></script>
+<script src="../vendor/highlight.min.js"></script>
+<style>
+:root {
+  --bg: #f7f5f1; --panel: #ffffff; --ink: #1d1a16; --muted: #6b645b; --line: #e6e0d6;
+  --accent: #b8620e; --accent-soft: #fbefe0; --code-bg: #f3efe8;
+  --hl-kw: #9a3e9a; --hl-str: #2f7d4f; --hl-num: #b8620e; --hl-cmt: #8a8177; --hl-fn: #2a5db0; --hl-meta: #8a5a00;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14110e; --panel: #1d1915; --ink: #ece6dd; --muted: #a39a8e; --line: #322b24;
+    --accent: #f2a23a; --accent-soft: #2e2214; --code-bg: #221d18;
+    --hl-kw: #d39bd6; --hl-str: #8fd19e; --hl-num: #f2a23a; --hl-cmt: #8f877b; --hl-fn: #82aaff; --hl-meta: #e5c07b;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14110e; --panel: #1d1915; --ink: #ece6dd; --muted: #a39a8e; --line: #322b24;
+  --accent: #f2a23a; --accent-soft: #2e2214; --code-bg: #221d18;
+  --hl-kw: #d39bd6; --hl-str: #8fd19e; --hl-num: #f2a23a; --hl-cmt: #8f877b; --hl-fn: #82aaff; --hl-meta: #e5c07b;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.75 "PingFang SC", "Noto Sans SC", system-ui, sans-serif; }
+header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 1; }
+header img { width: 28px; height: 28px; border-radius: 7px; }
+header .brand { font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
+header .back { margin-left: auto; color: var(--muted); font-size: 14px; text-decoration: none; }
+header .back:hover { color: var(--accent); }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+nav { padding: 24px 12px; border-right: 1px solid var(--line); font-size: 14px; position: sticky; top: 49px; align-self: start; max-height: calc(100vh - 49px); overflow: auto; }
+nav .group { color: var(--muted); font-size: 12px; margin: 14px 8px 4px; }
+nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+nav a:hover { background: var(--accent-soft); }
+nav a.cur { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+nav .toc a { padding-left: 20px; color: var(--muted); font-size: 13px; }
+article { padding: 24px 40px 80px; min-width: 0; }
+article h1 { font-size: 28px; margin: 8px 0 16px; }
+article h2 { font-size: 21px; margin: 36px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+article h3 { font-size: 17px; margin: 24px 0 8px; }
+article a { color: var(--accent); }
+article table { border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
+article th, article td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
+article th { background: var(--panel); }
+article td:first-child { min-width: 5.5em; }
+article code { font-family: ui-monospace, Menlo, monospace; font-size: 0.88em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+article pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow: auto; line-height: 1.55; }
+article pre code { background: none; padding: 0; font-size: 13px; }
+article blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid var(--accent); color: var(--muted); background: var(--panel); }
+.hljs-keyword, .hljs-built_in, .hljs-literal { color: var(--hl-kw); font-weight: 600; }
+.hljs-string, .hljs-regexp { color: var(--hl-str); }
+.hljs-number { color: var(--hl-num); }
+.hljs-comment { color: var(--hl-cmt); font-style: italic; }
+.hljs-title, .hljs-title.function_, .hljs-title.class_ { color: var(--hl-fn); }
+.hljs-meta, .hljs-attr, .hljs-name, .hljs-tag { color: var(--hl-meta); }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 12px; }
+  nav .toc { display: none; }
+  article { padding: 16px 16px 60px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <img src="../logo.svg" alt="">
+  <a class="brand" href="../">Amber</a><span style="color:var(--muted)">文档</span>
+  <a class="back" href="../">▶ 视频手册</a>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <article id="doc"></article>
+</div>
+<script>
+const DATA = {"md":"# 安装与部署\n\nAmber 是一个常驻服务，需要 macOS 和 Node.js 24 及以上版本。一个组织只部署一套，其他机器通过 HTTP 访问它。\n\n> **这篇是部署 Amber 服务端的。** 如果组织里已经部署了 Amber，你只是想让自己的 agent 用上它，不需要看这篇，按 [amber 命令行与 skill](cli-and-skill.md) 在 agent 所在的机器上装客户端和 skill 即可。\n\n## 1. 环境要求\n\n| 项目 | 要求 |\n|---|---|\n| 操作系统 | macOS。脚本沙盒依赖 `sandbox-exec` |\n| Node.js | ≥ 24。直接运行 TypeScript（type stripping），存储用内置的 `node:sqlite` |\n| Python | 用来运行指令脚本。默认是 Command Line Tools 自带的 `python3.9`，可以用环境变量 `AMBER_PYTHON` 换成别的路径 |\n| 反向代理 | nginx 或其他均可，用来对外提供网站，并给接口加 IP 白名单 |\n| 飞书应用 | 一个自建应用，配置方法见 [feishu-setup.md](feishu-setup.md) |\n\n## 2. 获取代码\n\n```sh\ngit clone https://github.com/xu4wang/amber.git ~/amber\ncd ~/amber\nnpm install          # 唯一的依赖是 @larksuiteoapi/node-sdk\n```\n\n## 3. 配置\n\n所有配置放在 `~/.config/amber/`，可以用 `AMBER_CONFIG_DIR` 改到别的目录。仓库里不包含任何凭证。\n\n```sh\nmkdir -p ~/.config/amber && chmod 700 ~/.config/amber\n```\n\n### 3.1 `lark-app.env`：飞书应用凭证（权限设为 0600）\n\n```sh\nAMBER_LARK_APP_ID=cli_xxxxxxxxxxxx\nAMBER_LARK_APP_SECRET=xxxxxxxxxxxxxxxx\n```\n\n### 3.2 `config.json`\n\n```json\n{\n  \"admins\": [\"admin@example.com\"],\n  \"reviewers\": [\"admin@example.com\", \"reviewer@example.com\"],\n  \"machines\": {\n    \"127.0.0.1\": \"local\",\n    \"192.168.1.10\": \"dev-a\",\n    \"192.168.1.11\": \"dev-b\"\n  },\n  \"approval\": {\n    \"code\": \"审批定义的 approval_code\",\n    \"reviewNodeId\": \"审核节点的 node_id\",\n    \"formFieldId\": \"表单里多行文本控件的 id\"\n  },\n  \"wiki\": {\n    \"spaceId\": \"知识库空间 id\",\n    \"parentNodeToken\": \"放审核文档的父节点 token\",\n    \"baseUrl\": \"https://\u003c你的租户>.feishu.cn/wiki/\"\n  },\n  \"services\": {\n    \"data-mcp\": { \"audience\": \"data-mcp\", \"tcpPort\": 8765 }\n  },\n  \"webBaseUrl\": \"http://amber.example.com\",\n  \"timezones\": [\n    { \"tz\": \"Asia/Shanghai\", \"label\": \"北京时间\" },\n    { \"tz\": \"Asia/Bangkok\", \"label\": \"曼谷时间\" }\n  ]\n}\n```\n\n| 字段 | 说明 |\n|---|---|\n| `admins` | 管理员，填邮箱或 union_id。管理员可以把指令设为全局或改回本地、下线任何指令、认领任何指令的新版本、管理任何定时任务；**不能**跳过审核。和审核人的区别见[使用指南](usage.md#创建人管理员审核人) |\n| `reviewers` | 审核人，填邮箱或 union_id。**所有人都同意**指令才生效（飞书会签审批）。只要有一个人查不到，Amber 就拒绝发起审核，不会悄悄少一个人 |\n| `machines` | 允许访问接口的机器，格式是 IP → 机器名。机器名只记在审计日志里，不给用户看：用户只知道是自己的 agent 提交或发起的（卡片上显示 agent 的 `--label`） |\n| `approval` | 飞书审批配置，取值方法见 [feishu-setup.md](feishu-setup.md#4-审批定义)。不配就退回到用卡片按钮审核 |\n| `wiki` | 放审核文档的知识库位置。要和 `approval` 一起配置 |\n| `services` | 脚本可以调用的本机服务，Amber 会为它们签发执行身份凭证，见 [identity.md](identity.md) |\n| `webBaseUrl` | **必填**。网站的外部地址，用来生成登录链接、做跨站请求检查，并通过 `/v1/info` 告诉 agent（不填只会是 localhost，登录链接在别的电脑上打不开） |\n| `timezones` | 可选。定时任务可选的时区（IANA 名称加显示名），**第一个是默认时区**；网站下拉框、卡片上的时间说明都用它。不配就只用 Amber 服务器所在的时区，显示为「服务器时间」 |\n| `dataDir` | 可选，数据目录，默认是 `~/.config/amber/data` |\n\n### 3.3 签名密钥\n\n第一次启动时，Amber 会自动生成 `~/.config/amber/signing-key.pem`（Ed25519，权限 0600），用来签发执行身份凭证。请把它和数据库一起备份；丢了以后，服务方需要重新获取公钥。\n\n## 4. 启动\n\n先在前台跑一次，确认配置没问题：\n\n```sh\ncd ~/amber && node --no-warnings src/main.ts\n```\n\n日志里依次出现 `long connection started`、`scheduler started`、`api listening on 127.0.0.1:7341`、`web listening on 127.0.0.1:7342`，就说明启动成功。\n\n| 端口 | 用途 | 绑定地址 |\n|---|---|---|\n| 7341（`AMBER_API_PORT`） | 给 agent 用的接口 `/v1/…`，另有公钥 `/v1/keys` | 127.0.0.1 |\n| 7342（`AMBER_WEB_PORT`） | 网站 | 127.0.0.1 |\n\n两个端口都只监听本机，对外由反向代理转发。\n\n### 常驻运行（launchd）\n\n`~/Library/LaunchAgents/com.example.amber.plist`：\n\n```xml\n\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\u003c!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n\u003cplist version=\"1.0\">\n\u003cdict>\n  \u003ckey>Label\u003c/key>\u003cstring>com.example.amber\u003c/string>\n  \u003ckey>ProgramArguments\u003c/key>\n  \u003carray>\n    \u003cstring>/path/to/node\u003c/string>\n    \u003cstring>--no-warnings\u003c/string>\n    \u003cstring>src/main.ts\u003c/string>\n  \u003c/array>\n  \u003ckey>WorkingDirectory\u003c/key>\u003cstring>/Users/you/amber\u003c/string>\n  \u003ckey>EnvironmentVariables\u003c/key>\n  \u003cdict>\n    \u003ckey>HOME\u003c/key>\u003cstring>/Users/you\u003c/string>\n    \u003c!-- 如果机器上网要走代理，在这里加 http_proxy / https_proxy -->\n  \u003c/dict>\n  \u003ckey>RunAtLoad\u003c/key>\u003ctrue/>\n  \u003ckey>KeepAlive\u003c/key>\u003ctrue/>\n  \u003ckey>ThrottleInterval\u003c/key>\u003cinteger>10\u003c/integer>\n  \u003ckey>StandardOutPath\u003c/key>\u003cstring>/Users/you/.config/amber/data/amber.log\u003c/string>\n  \u003ckey>StandardErrorPath\u003c/key>\u003cstring>/Users/you/.config/amber/data/amber.log\u003c/string>\n\u003c/dict>\n\u003c/plist>\n```\n\n```sh\nlaunchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.amber.plist   # 加载并启动\nlaunchctl kickstart -k gui/$(id -u)/com.example.amber                              # 重启（更新代码后）\nlaunchctl bootout gui/$(id -u)/com.example.amber                                   # 停止并卸载\n```\n\n## 5. 反向代理（nginx）\n\n```nginx\nserver {\n    listen 80;\n    server_name amber.example.com;\n    client_max_body_size 512k;\n\n    # 给 agent 用的接口：只放行 config.json 里 machines 列出的 IP\n    location /v1/ {\n        allow 127.0.0.1;\n        allow 192.168.1.10;\n        allow 192.168.1.11;\n        deny all;\n        proxy_pass http://127.0.0.1:7341;\n        proxy_set_header X-Amber-Client-IP $remote_addr;   # Amber 根据它识别是哪台机器\n        proxy_set_header Host $host;\n        proxy_read_timeout 150s;                            # 脚本最长可以跑 120 秒\n    }\n\n    # 网站\n    location / {\n        proxy_pass http://127.0.0.1:7342;\n        proxy_set_header X-Amber-Client-IP $remote_addr;\n        proxy_set_header Host $host;\n        proxy_read_timeout 150s;\n    }\n\n    # 前端库可以由 nginx 直接提供（Amber 自己也能提供，这里只是少走一层）\n    location ~ ^/vendor/([a-z.-]+\\.js)$ {\n        alias /Users/you/amber/web/vendor/$1;\n        types { text/javascript js; }\n        add_header Cache-Control \"max-age=86400\" always;\n    }\n}\n```\n\n注意：\n\n- nginx 的 `allow` 列表和 `config.json` 的 `machines` 要保持一致。Amber 只认 `X-Amber-Client-IP`，对不上的 IP 一律返回 403。\n- **确认 nginx 的 `proxy_temp` 目录可写。** 不可写时，响应稍大、客户端又慢的情况下会被截断，日志里出现 `proxy_temp … Permission denied`。表现是网页上图表报 `Cannot read properties of undefined (reading 'isString')`，原因是 vega.min.js 只下载了一部分。修复办法：修正那个目录的属主，或者在上面两个 `location` 里加 `proxy_max_temp_file_size 0;`。\n- `/v1/keys`（公钥）不需要放行给外部，服务方在本机读取即可。\n- 网站登录用的是 cookie。如果站点要开放到内网以外，**必须先上 HTTPS**。\n\n## 6. 让 agent 用起来\n\n在每台跑 agent 的机器上安装 `amber` 命令行和 skill，见 [cli-and-skill.md](cli-and-skill.md#安装)。装好后在每台机器上运行一次 `amber config set-url http://\u003c你们的 Amber 地址>`，再用 `amber info` 检查。\n\n## 7. 运维\n\n| 事项 | 做法 |\n|---|---|\n| 日志 | `~/.config/amber/data/amber.log` |\n| 数据 | `~/.config/amber/data/amber.db`（SQLite）：指令、运行记录、审计、请求、定时任务、网站登录 |\n| 备份 | 备份 `amber.db` 和 `signing-key.pem`。表结构升级时 Amber 会自动迁移，升级前建议手动复制一份数据库 |\n| 更新代码 | `git pull`，然后 `launchctl kickstart -k …`。定时任务只在 Amber 运行时触发，停机期间错过的不会补跑 |\n| 运维命令 | `node src/cli.ts list`（列出全部指令）、`node src/cli.ts retire \u003cid>`（下线指令）。每次操作都写审计。`node src/cli.ts keys` 从现有私钥文件导出公钥给服务方固定用：只读，私钥不存在或权限对同组、其他用户开放时直接报错、不会生成新密钥，也不写审计，导出由部署记录连同 kid 一起留档 |\n| 回归测试 | `npm test`：起一个隔离的 Amber（临时数据库 + 假飞书），覆盖认领、审核、新版本、下线、agent 三档、定时任务、网站、可信身份和沙盒，几秒跑完，不碰真实飞书和线上数据。改代码后先跑它 |\n| 冒烟测试 | `npm run smoke`：在 Amber 所在机器上检查真实部署（接口、网站、前端库完整性）。在 `~/.config/amber/smoke.json` 写 `{\"testChat\": \"oc_…\"}`（一个拉了 Amber 的测试群）后，还会把每种卡片真实发到飞书验证格式，发完立即撤回 |\n| 审计 | 数据库 `audit` 表，记录提交、认领、审核、执行、签发凭证、定时任务、登录等所有动作 |\n","nav":[{"name":"usage","title":"使用指南","current":false},{"name":"cli-and-skill","title":"amber 命令行与 skill","current":false},{"name":"identity","title":"可信身份","current":false},{"name":"identity-example","title":"可信身份：完整示例","current":false},{"name":"install","title":"安装与部署","current":true},{"name":"feishu-setup","title":"飞书应用配置","current":false}]};
+const REPO = 'https://github.com/xu4wang/amber/blob/main/';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// Same anchor rule as GitHub, so links written for the repo keep working here.
+const slug = t => t.trim().toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
+
+const doc = document.getElementById('doc');
+doc.innerHTML = DOMPurify.sanitize(marked.parse(DATA.md));
+const names = new Set(DATA.nav.map(n => n.name));
+doc.querySelectorAll('a[href]').forEach(a => {
+  const h = a.getAttribute('href');
+  const m = /^([a-z-]+)\.md(#.*)?$/.exec(h);
+  if (m && names.has(m[1])) a.setAttribute('href', m[1] + '.html' + (m[2] || ''));
+  else if (/^\.\.\//.test(h)) { a.setAttribute('href', REPO + h.replace(/^\.\.\//, '')); a.target = '_blank'; a.rel = 'noopener'; }
+  else if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+});
+const toc = [];
+doc.querySelectorAll('h2, h3').forEach(h => { h.id = slug(h.textContent); if (h.tagName === 'H2') toc.push(h); });
+if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
+  const lang = (c.className.match(/language-(\w+)/) || [])[1];
+  if (lang && hljs.getLanguage(lang)) hljs.highlightElement(c);
+});
+
+const cur = DATA.nav.find(n => n.current);
+document.getElementById('nav').innerHTML =
+  '<div class="group">使用</div>' + DATA.nav.slice(0, 1).map(n => link(n)).join('') +
+  '<div class="group">进阶</div>' + DATA.nav.slice(1).map(n => link(n)).join('');
+function link(n) {
+  const a = `<a href="${esc(n.name)}.html" class="${n.current ? 'cur' : ''}">${esc(n.title)}</a>`;
+  return n.current && toc.length ? a + '<div class="toc">' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('') + '</div>' : a;
+}
+if (location.hash) { const t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView(); }
+</script>
+</body>
+</html>
