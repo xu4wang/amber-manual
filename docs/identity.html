@@ -2,21 +2,35 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>可信身份 · Amber</title>
 <link rel="icon" href="../logo.svg">
+<script>try { if (localStorage.getItem('amber-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
 <script src="../vendor/marked.min.js"></script>
 <script src="../vendor/purify.min.js"></script>
 <script src="../vendor/highlight.min.js"></script>
 <style>
 :root {
+  /* Light (default). The dark palette below applies when <html data-theme="dark">. */
+  color-scheme: light;
+  --bg: #ffffff; --panel: #ffffff; --card: #f4f4f4; --ink: #151515; --body-ink: #2b2b2b; --muted: #6b6b6b; --muted-2: #8f8f8f; --line: #e4e4e4; --line-2: #d2d2d2;
+  --accent: #f2a23a; --accent-press: #b8620e; --accent-hover: #ffb34d; --accent-ink: #a85a0c; --accent-soft: rgba(242, 162, 58, 0.18); --on-accent: #181818; --focus: #f2a23a; --ok: #03904a; --warn: #d92d20; --info: #2f7fa3;
+  --chip: #f0f0f0; --hover: #f2f2f2; --code-bg: #f6f6f6;
+  --hl-kw: #cf222e; --hl-str: #0a7d33; --hl-num: #b35900; --hl-cmt: #6e7781; --hl-fn: #0550ae; --hl-meta: #8250df;
+  --dg-bg: #ffffff; --dg-card: #f7f7f7; --dg-line: #c9c9c9; --dg-ink: #151515; --dg-muted: #5f5f5f; --dg-accent: #e0891c;
+  --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+:root[data-theme="dark"] {
   /* Cinematic dark: near-black canvas, one scarce Amber accent (the logo's #F2A23A), white type at weight 500, sharp corners. */
   --bg: #181818; --panel: #181818; --card: #303030; --ink: #ffffff; --muted: #969696; --muted-2: #666666; --line: #303030;
   --accent: #f2a23a; --accent-press: #b8620e; --accent-soft: rgba(242, 162, 58, 0.16); --on-accent: #181818; --ok: #03904a; --warn: #f13a2c; --info: #4c98b9;
   --chip: #303030; --hover: #222222; --code-bg: #111111;
   --hl-kw: #ff7b72; --hl-str: #a5d6a7; --hl-num: #ffb74d; --hl-cmt: #7d7d7d; --hl-fn: #90caf9; --hl-meta: #e5c07b;
   --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  color-scheme: dark;
+  --body-ink: #d6d6d6; --line-2: #444444; --accent-hover: #ffb34d; --accent-ink: #f2a23a; --focus: #ffd27a;
+  --dg-bg: #181818; --dg-card: #262626; --dg-line: #4a4a4a; --dg-ink: #ffffff; --dg-muted: #a8a8a8; --dg-accent: #f2a23a;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.75 "PingFang SC", "Noto Sans SC", system-ui, sans-serif; }
@@ -24,22 +38,21 @@ header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; bord
 header img { width: 28px; height: 28px; border-radius: 7px; }
 header .brand { font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
 header .back { margin-left: auto; color: var(--muted); font-size: 14px; text-decoration: none; }
-header .back:hover { color: var(--accent); }
+header .back:hover { color: var(--accent-ink); }
 header .gh { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; text-decoration: none; margin-left: 16px; }
-header .gh:hover { color: var(--accent); }
+header .gh:hover { color: var(--accent-ink); }
 header .gh svg { width: 18px; height: 18px; fill: currentColor; }
-.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr) 200px; max-width: 1400px; margin: 0 auto; }
 nav { padding: 24px 12px; border-right: 1px solid var(--line); font-size: 14px; position: sticky; top: 49px; align-self: start; max-height: calc(100vh - 49px); overflow: auto; }
 nav .group { color: var(--muted); font-size: 12px; margin: 14px 8px 4px; }
 nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
 nav a:hover { background: var(--accent-soft); }
-nav a.cur { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-nav .toc a { padding-left: 20px; color: var(--muted); font-size: 13px; }
+nav a.cur { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
 article { padding: 24px 40px 80px; min-width: 0; }
 article h1 { font-size: 28px; margin: 8px 0 16px; }
 article h2 { font-size: 21px; margin: 36px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
 article h3 { font-size: 17px; margin: 24px 0 8px; }
-article a { color: var(--accent); }
+article a { color: var(--accent-ink); }
 article table { border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
 article th, article td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
 article th { background: var(--panel); }
@@ -57,7 +70,6 @@ article blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid v
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   nav { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 12px; }
-  nav .toc { display: none; }
   article { padding: 16px 16px 60px; }
 }
 
@@ -73,39 +85,92 @@ nav .group { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; text-tran
 nav a { border-radius: 0; border-left: 2px solid transparent; color: var(--muted); }
 nav a:hover { background: none; color: var(--ink); }
 nav a.cur { background: none; color: var(--ink); font-weight: 600; border-left-color: var(--accent); }
-nav .toc a { color: var(--muted-2); }
-nav .toc a:hover { color: var(--ink); }
-article { padding: 48px 56px 128px; color: #d6d6d6; }
+article { padding: 48px 56px 128px; color: var(--body-ink); }
 article h1 { font-size: 56px; font-weight: 500; letter-spacing: -1.12px; line-height: 1.1; color: var(--ink); margin: 8px 0 32px; }
 article h2 { font-size: 26px; font-weight: 500; letter-spacing: 0.2px; color: var(--ink); border-top: 1px solid var(--line); margin: 64px 0 16px; padding-top: 32px; }
 article h3 { font-size: 18px; font-weight: 500; color: var(--ink); }
 article strong { color: var(--ink); font-weight: 600; }
 article a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
-article a:hover { color: var(--accent); }
+article a:hover { color: var(--accent-ink); }
 article table { font-size: 14px; }
 article th { background: var(--card); color: var(--ink); font-weight: 600; }
-article th, article td { border-color: #3a3a3a; }
+article th, article td { border-color: var(--line-2); }
 article code { background: var(--card); border-radius: 0; color: var(--ink); }
 article pre { background: var(--code-bg); border: none; border-radius: 0; }
 article pre code { background: none; }
-article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: #d6d6d6; padding: 12px 20px; }
+article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: var(--body-ink); padding: 12px 20px; }
 article hr { border: none; border-top: 1px solid var(--line); }
+article img { display: block; max-width: 100%; height: auto; margin: 24px 0; }
+article .diagram { margin: 24px 0; }
+article .diagram svg { display: block; width: 100%; max-width: 960px; height: auto; }
 @media (max-width: 860px) { article { padding: 24px 16px 64px; } article h1 { font-size: 32px; } }
+
+/* ---- Collapsible menu: sections fold, and the whole menu can be hidden ---- */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-left: -8px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; }
+.navbtn:hover, .navbtn:focus-visible { color: var(--ink); border-color: var(--line); outline: none; }
+.navbtn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+nav details.sec { margin: 0; }
+nav details.sec + details.sec { margin-top: 12px; }
+nav details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 10px 4px; padding: 6px 0; border-bottom: 1px solid var(--line); user-select: none; }
+nav details.sec > summary::-webkit-details-marker { display: none; }
+nav details.sec > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; margin-right: 4px; }
+nav details.sec[open] > summary::after { transform: rotate(45deg); }
+nav details.sec > summary:hover::after { border-color: var(--ink); }
+nav details.sec > summary:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+nav details.sec .group:first-of-type { margin-top: 12px; }
+body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr) 200px; max-width: 1180px; }
+/* This page's sections, on the right. */
+aside#toc { position: sticky; top: 65px; align-self: start; max-height: calc(100vh - 65px); overflow: auto; padding: 48px 16px 32px 0; font-size: 13px; }
+aside#toc .toc-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted-2); margin: 0 0 10px 12px; }
+aside#toc a { display: block; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; line-height: 1.5; }
+aside#toc a:hover { color: var(--ink); }
+aside#toc a.on { color: var(--ink); border-left-color: var(--accent); }
+body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+body.no-toc aside#toc { display: none; }
+@media (max-width: 1180px) {
+  .layout, body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+  body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+  aside#toc { display: none; }
+}
+@media (max-width: 860px) {
+  .layout, body.no-toc .layout, body.nav-hidden .layout, body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); }
+}
+body.nav-hidden nav { display: none; }
+@media (max-width: 860px) {
+  /* On a phone the menu starts hidden; the button opens it above the page. */
+  body:not(.nav-open) nav { display: none; }
+  body.nav-hidden.nav-open nav { display: block; }
+  header { gap: 8px; padding: 0 12px; }
+  header > span { display: none; }
+  header .back, header .gh { white-space: nowrap; }
+  header .gh { margin-left: 4px; }
+}
+
+/* ---- Light / dark switch ---- */
+.themebtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; letter-spacing: 0; }
+.themebtn:hover, .themebtn:focus-visible { background: none; color: var(--ink); border-color: var(--line); outline: none; }
+.themebtn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.themebtn .i-sun, :root[data-theme="dark"] .themebtn .i-moon { display: none; }
+:root[data-theme="dark"] .themebtn .i-sun { display: inline; }
 </style>
 </head>
 <body>
 <header>
+  <button class="navbtn" id="navbtn" type="button" aria-controls="nav" aria-expanded="true" title="收起 / 展开目录"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
   <img src="../logo.svg" alt="">
   <a class="brand" href="../">Amber</a><span style="color:var(--muted)">文档</span>
   <a class="back" href="../">▶ 视频手册</a>
+  <button class="themebtn" id="themebtn" type="button" title="切换浅色 / 深色"><svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg><svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M4 16l1.4-1.4M14.6 5.4 16 4"/></svg></button>
   <a class="gh" href="https://github.com/xu4wang/amber" target="_blank" rel="noopener" title="GitHub 仓库"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
 </header>
 <div class="layout">
   <nav id="nav"></nav>
   <article id="doc"></article>
+  <aside id="toc" aria-label="本页目录"></aside>
 </div>
 <script>
-const DATA = {"md":"# 可信身份\n\nAmber 的核心约定是：**执行人是谁，只能由飞书告诉 Amber**，不能由 agent、模型或请求方自己声明。下面分三部分说明：Amber 怎么确认执行人；脚本调用后端服务时，怎么把这个身份可靠地交给服务；服务方怎么验证。\n\n> 想直接看能运行的代码：[可信身份：完整示例](identity-example.md)（Python 服务 + 应用脚本 + 配置，一步步走完）。\n\n## 1. 身份从哪来\n\n| 入口 | 执行人 | 身份来源 |\n|---|---|---|\n| 飞书里 @Amber 或私聊 Amber，在表单卡片上执行 | 发消息或点卡片的人 | 飞书事件里的 `sender` 或 `operator`（union_id） |\n| agent 调用 `amber run`，需要身份的应用 | **点确认卡片的人** | 卡片回调事件里的 `operator` |\n| agent 调用 `amber run`，不需要身份的应用 | 记为 `agent:\u003c机器名>` | 不代表任何人，也不签发凭证 |\n| 定时任务 | 定时任务的创建人 | 创建时点「创建定时任务」的人（卡片事件），或者网站上已登录的人 |\n| 网站 | 已登录的人 | 网站登录（见下文），登录凭证只由 Amber 在本人私聊里发出 |\n| 认领时试运行 | 认领人 | 认领卡的点击事件 |\n\n几条刻意的限制：\n\n- **agent 接口不带凭证、只按 IP 放行**，所以它永远不能代表某个人。`--user` 只决定谁能点卡片、私聊里看哪个人的应用，不会作为执行身份。\n- 卡片指定了被请求人时，别人点击会被拒绝；群里的卡片只能在原来的群里点。\n- 确认卡片只能处理一次，24 小时后过期。\n- 应用的执行身份可以以后再加第四种来源：botmux MCP 网关在每次调用时签发的可信调用人。前提是 botmux 先修好「身份绑定在最后一次输入上」的问题。目前没有启用。\n\n## 2. 网站登录\n\n网站不用飞书 OAuth，也就不需要配置回调地址。\n\n1. 用户在飞书私聊 Amber 发送「登录」；也可以在群里 @Amber 发「登录」，这时 Amber 把登录卡片**发到这个人和 Amber 的私聊里**，群里只回一句「已私聊发给你」。登录链接永远不会出现在群里。私聊发不出去时，作废这次的登录码并提示用户直接私聊。\n2. Amber 生成一个 256 位的随机登录码，数据库里只存它的 sha256。回复一张卡片，按钮链接是 `\u003cwebBaseUrl>/login?t=\u003c登录码>`。登录码和发消息的人（union_id）绑定，**5 分钟内有效、只能用一次**。\n3. 浏览器打开链接后，Amber 发放会话 cookie：`HttpOnly`、`SameSite=Lax`，有效期 7 天，服务端同样只存哈希。随后把那张卡片改成「已登录」，用户能立刻发现是否有人冒用。\n4. 私聊发「退出网站」，会让这个人在所有浏览器里的登录失效。\n\n为什么不用「网页上显示一串码，到 Amber 那里输入」：这种方式会被钓鱼。攻击者可以把自己网页上的码发给别人，骗对方去确认，结果攻击者的浏览器就以对方的身份登录了。现在的做法是登录凭证只出现在本人的私聊里，剩下的风险只有「本人把卡片转发给别人」，所以设计成一次性加短有效期。\n\n网站的写操作只接受 `application/json`，而且 `Origin` 必须是本站，用来防跨站请求。群应用只有确认登录人是群成员才能用；确认不了（比如缺权限）就一律拒绝。\n\n## 3. 执行身份凭证\n\n应用脚本要以执行人的身份调用后端服务（例如查数仓）时，Amber 会为**每次执行、每个声明的服务**签发一张短时效凭证。服务方只要信任 Amber 的公钥，不需要信任 Amber 的进程，更不需要信任脚本。\n\n### 3.1 Amber 保证什么\n\n| 保证 | 怎么做到 |\n|---|---|\n| 执行人可靠 | 只来自上面第 1 节的飞书事件或网站登录 |\n| 代码经过审核 | 认领人先试运行，所有审核人同意后应用才生效。凭证里的 `rev` 是审核通过那一版定义的哈希，每次执行前都会重新计算核对 |\n| 数据不外传 | 声明了服务的脚本，沙盒只放行这些服务的本机端口或 unix socket，外网和其他本机端口全部断开。声明服务和开放外网不能同时选，提交草稿时就会被拒绝 |\n| 用途受限 | 一张凭证只对一个服务有效（`aud` 由 Amber 配置决定，脚本改不了）；5 分钟过期；带一次性编号 `jti`；每次签发都写审计 |\n\n### 3.2 格式\n\nJWS Compact（即 JWT），算法 EdDSA（Ed25519）。\n\n```text\nheader  { \"alg\": \"EdDSA\", \"typ\": \"JWT\", \"kid\": \"\u003c公钥指纹>\" }\npayload {\n  \"iss\": \"amber\",\n  \"aud\": \"data-mcp\",          服务名，取自 Amber 配置 services.\u003c名称>.audience\n  \"sub\": \"on_…\",              执行人的飞书 union_id\n  \"cmd\": \"9bba8b5d\",          应用 id\n  \"rev\": \"075b025f…\",         应用定义哈希（审核通过的那一版）\n  \"run\": \"85df3e7f\",          本次执行 id\n  \"chat\": \"oc_…\",             应用所属的群或私聊\n  \"channel\": \"bot\",           bot / web / agent / schedule；试运行时加 .trial，例如 bot.trial\n  \"call_index\": 1,            这是本次执行的第几张凭证（从 1 开始）\n  \"call_count\": 2,            本次执行对这个服务一共签了几张，等于脚本声明的 calls\n  \"iat\": 1791389686, \"exp\": 1791389986,\n  \"jti\": \"uuid\"\n}\n```\n\n### 3.3 配置服务\n\n在 Amber 的 `config.json` 里登记服务：\n\n```json\n\"services\": {\n  \"data-mcp\": { \"audience\": \"data-mcp\", \"tcpPort\": 8765 }\n}\n```\n\n`tcpPort` 也可以换成 `\"unixSocket\": \"/path/to/service.sock\"`。应用脚本声明 `\"services\": {\"data-mcp\": {\"calls\": 2}}` 后（`calls` = 每次执行最多调用几次，1–20 的整数，随代码一起审核、计入版本哈希），运行时会从标准输入收到：\n\n```json\n{\"services\": {\"data-mcp\": {\"tokens\": [\"eyJhbGciOiJFZERTQSIs…\", \"eyJhbGciOiJFZERTQSIs…\"], \"tcpPort\": 8765}}}\n```\n\n`tokens` 按 `call_index` 排好序。脚本每次请求用一张，例如 `Authorization: Amber \u003ctoken>`，具体怎么带由服务方决定。每张都有独立的 `jti`，服务方应当**每张只接受一次**；用完就没有了，Amber 不会在运行中补签。旧写法 `\"services\": [\"data-mcp\"]` 提交时会被拒绝。\n\n### 3.4 服务方怎么验证\n\n1. **取公钥**：由 Amber 的部署方在 Amber 所在机器上运行 `node src/cli.ts keys`。它直接从已有的签名私钥文件推出公钥（JWKS 输出到标准输出，`kid` 输出到标准错误），**不经过任何端口、只读**：私钥不存在或权限对同组、其他用户开放时直接报错，不会生成新密钥。部署方把 JWKS 和 `kid` 通过部署记录交给服务方；服务方核对 `kid` 一致后，先写临时文件再 `mv` 原子替换，把公钥**整份写进服务自己的配置**。\n   - 不要用 `curl 127.0.0.1:7341/v1/keys` 建立信任：Amber 停掉时，本机任何进程都能占用 7341 端口冒充 Amber，那时固定下来的就是假钥匙。`/v1/keys` 只适合事后对照。\n   - 运行时也不要访问 7341。遇到配置里没有的 `kid` 直接拒绝。\n   - 局限：在 Amber 私钥改由专用系统用户持有之前，同一系统用户下的任何进程都能读私钥，凭证只能证明「来自这台机器上的这个用户」，不能证明来自 Amber 进程。\n2. **验签**：用 `kid` 对应的 Ed25519 公钥验证签名。\n3. **检查声明**：`iss == \"amber\"`，`aud ==` 本服务名，`exp` 没过期（建议允许 30 秒时钟误差）。\n4. **防重放**：持久化记录用过的 `jti`（保留到 `exp` 之后），重复的拒绝；只放内存在服务重启后会失效。`call_index`、`call_count` 以签名里的为准，请求体里的同名字段一律忽略。\n5. **以 `sub`（union_id）作为调用人**，走和其他入口完全相同的权限判断；请求体里自称的任何身份字段一律忽略。\n6. **审计**：记录 `caller_source = \"amber\"`，以及 `cmd`、`rev`、`run`、`channel`。\n\n服务方还可以自己决定一些策略，比如拒绝试运行（`channel` 以 `.trial` 结尾）、对 `schedule` 来源单独限流、限制能查的库表。这些都在服务方实现，Amber 不需要改动。\n\nNode.js（只用内置模块）：\n\n```js\nimport { createPublicKey, verify } from 'node:crypto';\n\nconst jwks = await (await fetch('http://127.0.0.1:7341/v1/keys')).json();\nconst keys = Object.fromEntries(jwks.keys.map(k => [k.kid, createPublicKey({ key: k, format: 'jwk' })]));\n\nfunction verifyAmber(token, audience) {\n  const [h, p, s] = token.split('.');\n  const header = JSON.parse(Buffer.from(h, 'base64url'));\n  const payload = JSON.parse(Buffer.from(p, 'base64url'));\n  const key = keys[header.kid];\n  if (header.alg !== 'EdDSA' || !key) throw new Error('unknown key');\n  if (!verify(null, Buffer.from(`${h}.${p}`), key, Buffer.from(s, 'base64url'))) throw new Error('bad signature');\n  const now = Date.now() / 1000;\n  if (payload.iss !== 'amber' || payload.aud !== audience || payload.exp \u003c now - 30) throw new Error('bad claims');\n  return payload;   // payload.sub 就是执行人的 union_id\n}\n```\n\nPython（需要 `cryptography`）：\n\n```python\nimport base64, json, time, urllib.request\nfrom cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey\n\ndef b64(s): return base64.urlsafe_b64decode(s + \"=\" * (-len(s) % 4))\n\njwks = json.load(urllib.request.urlopen(\"http://127.0.0.1:7341/v1/keys\"))\nKEYS = {k[\"kid\"]: Ed25519PublicKey.from_public_bytes(b64(k[\"x\"])) for k in jwks[\"keys\"]}\n\ndef verify_amber(token, audience):\n    h, p, s = token.split(\".\")\n    header, payload = json.loads(b64(h)), json.loads(b64(p))\n    key = KEYS.get(header.get(\"kid\"))\n    if header.get(\"alg\") != \"EdDSA\" or key is None:\n        raise ValueError(\"unknown key\")\n    key.verify(b64(s), f\"{h}.{p}\".encode())          # 签名不对会抛 InvalidSignature\n    if payload[\"iss\"] != \"amber\" or payload[\"aud\"] != audience or payload[\"exp\"] \u003c time.time() - 30:\n        raise ValueError(\"bad claims\")\n    return payload                                    # payload[\"sub\"] 就是执行人的 union_id\n```\n\n### 3.5 密钥\n\n私钥在 `~/.config/amber/signing-key.pem`（0600），首次启动时自动生成。轮换时让 `/v1/keys` 同时发布新旧两把公钥，用 `kid` 区分；等旧凭证全部过期后再撤掉旧的。目前只有一把固定密钥，轮换功能还没实现。\n\n### 3.6 已接入的服务：data-mcp\n\ndata-mcp（只读查数服务）已经按上面的规则接入。它的 Amber 入口是一个单独的进程，只监听 `127.0.0.1`，默认端口 8766，部署时以 `config.json` 里 `services.data-mcp` 登记的端口为准，脚本一律读输入里的 `tcpPort`。\n\n**请求**：只有一个接口，一次请求里先校验 SQL、再执行，所以每次查询只消耗一张凭证，应用声明 `\"services\": {\"data-mcp\": {\"calls\": 1}}` 即可；要查几次就声明几次。\n\n```\nPOST /amber/query\nAuthorization: Amber \u003ctoken>\nContent-Type: application/json\n\n{\"sql\": \"SELECT …\", \"datasource\": \"tchouse-c\"}\n```\n\n- 请求体只接受 `sql` 和 `datasource` 两个字段（`datasource` 默认 `tchouse-c`），多带任何字段返回 422。执行人身份只取自凭证的 `sub`，请求体里没有、也不接受身份字段。\n- 每张凭证只能用一次。\n\n**响应**：\n\n| HTTP 状态 | 含义 |\n|---|---|\n| 200 | 请求被处理。是否成功看 body 里的 `status` |\n| 401 | 凭证缺失、验签失败或已过期，`detail` 是错误码，例如 `missing_amber_authorization` |\n| 409 | 凭证已经用过 |\n| 422 | 请求体字段不对 |\n| 429 | 定时执行（`channel` 为 `schedule`）超过限流，默认每分钟 10 次 |\n\n200 的 body 是 data-mcp 平常的查询结果，另加一个 `amber_audit_id`：\n\n| 字段 | 说明 |\n|---|---|\n| `status` | `success` / `validation_error` / `not_found` / `error`，只有 `success` 才算成功 |\n| `columns` | `[{\"name\", \"type\", …}]` |\n| `rows` | 对象数组，以列名为键 |\n| `row_count`、`truncated` | 行数，以及是否被截断 |\n| `quality_warnings` | 数据质量提示 |\n| `error_code`、`error_name`、`retryable` | 失败时的原因；校验没过时原因也可能在 `issues[].code` |\n| `query_id` | 本次查询的 id，排查时用 |\n\n**服务方策略**：试运行（`channel` 以 `.trial` 结尾）最多返回 20 行；定时执行单独限流。\n\n最小的 Python 脚本：\n\n```python\nimport json, sys, urllib.request, urllib.error\n\ninp = json.load(sys.stdin)\nsvc = inp[\"services\"][\"data-mcp\"]\nreq = urllib.request.Request(\n    f\"http://127.0.0.1:{svc['tcpPort']}/amber/query\",\n    data=json.dumps({\"sql\": \"SELECT 1 AS x\"}).encode(),\n    headers={\"Authorization\": \"Amber \" + svc[\"tokens\"][0], \"Content-Type\": \"application/json\"},\n)\nopener = urllib.request.build_opener(urllib.request.ProxyHandler({}))   # 不走代理\ntry:\n    r = json.load(opener.open(req, timeout=80))\nexcept urllib.error.HTTPError as e:\n    sys.exit(\"服务拒绝：\" + e.read().decode(\"utf-8\", \"replace\")[:300])\nif r.get(\"status\") != \"success\":\n    sys.exit(\"查询失败：\" + str(r.get(\"error_code\") or r.get(\"issues\") or r.get(\"status\"))[:300])\nprint(r[\"rows\"])\n```\n","nav":[{"name":"usage","title":"使用指南","current":false},{"name":"sharing","title":"应用的分享","current":false},{"name":"cli-and-skill","title":"amber 命令行与 skill","current":false},{"name":"executor","title":"执行端","current":false},{"name":"environment-format","title":"运行环境定义格式","current":false},{"name":"identity","title":"可信身份","current":true},{"name":"identity-example","title":"可信身份：完整示例","current":false},{"name":"install","title":"安装与部署","current":false},{"name":"feishu-setup","title":"飞书应用配置","current":false}]};
+const DATA = {"md":"# 可信身份\n\nAmber 的核心约定是：**执行人是谁，只能由飞书告诉 Amber**，不能由 agent、模型或请求方自己声明。下面分三部分说明：Amber 怎么确认执行人；脚本调用后端服务时，怎么把这个身份可靠地交给服务；服务方怎么验证。\n\n> 想直接看能运行的代码：[可信身份：完整示例](identity-example.md)（Python 服务 + 应用脚本 + 配置，一步步走完）。\n\n## 1. 身份从哪来\n\n| 入口 | 执行人 | 身份来源 |\n|---|---|---|\n| 飞书里 @Amber 或私聊 Amber，在表单卡片上执行 | 发消息或点卡片的人 | 飞书事件里的 `sender` 或 `operator`（union_id） |\n| agent 调用 `amber run`，需要身份的应用 | **点确认卡片的人** | 卡片回调事件里的 `operator` |\n| agent 调用 `amber run`，不需要身份的应用 | 记为 `agent:\u003c机器名>` | 不代表任何人，也不签发凭证 |\n| 定时任务 | 定时任务的创建人 | 创建时点「创建定时任务」的人（卡片事件），或者网站上已登录的人 |\n| 网站 | 已登录的人 | 网站登录（见下文），登录凭证只由 Amber 在本人私聊里发出 |\n| 认领时试运行 | 认领人 | 认领卡的点击事件 |\n\n几条刻意的限制：\n\n- **agent 接口不带凭证、只按 IP 放行**，所以它永远不能代表某个人。`--user` 只决定谁能点卡片、私聊里看哪个人的应用，不会作为执行身份。\n- 卡片指定了被请求人时，别人点击会被拒绝；群里的卡片只能在原来的群里点。\n- 确认卡片只能处理一次，24 小时后过期。\n- 应用的执行身份可以以后再加第四种来源：botmux MCP 网关在每次调用时签发的可信调用人。前提是 botmux 先修好「身份绑定在最后一次输入上」的问题。目前没有启用。\n\n## 2. 网站登录\n\n网站不用飞书 OAuth，也就不需要配置回调地址。\n\n1. 用户在飞书私聊 Amber 发送「登录」；也可以在群里 @Amber 发「登录」，这时 Amber 把登录卡片**发到这个人和 Amber 的私聊里**，群里只回一句「已私聊发给你」。登录链接永远不会出现在群里。私聊发不出去时，作废这次的登录码并提示用户直接私聊。\n2. Amber 生成一个 256 位的随机登录码，数据库里只存它的 sha256。回复一张卡片，按钮链接是 `\u003cwebBaseUrl>/login?t=\u003c登录码>`。登录码和发消息的人（union_id）绑定，**5 分钟内有效、只能用一次**。\n3. 浏览器打开链接后，Amber 发放会话 cookie：`HttpOnly`、`SameSite=Lax`，有效期 7 天，服务端同样只存哈希。随后把那张卡片改成「已登录」，用户能立刻发现是否有人冒用。\n4. 私聊发「退出网站」，会让这个人在所有浏览器里的登录失效。\n\n为什么不用「网页上显示一串码，到 Amber 那里输入」：这种方式会被钓鱼。攻击者可以把自己网页上的码发给别人，骗对方去确认，结果攻击者的浏览器就以对方的身份登录了。现在的做法是登录凭证只出现在本人的私聊里，剩下的风险只有「本人把卡片转发给别人」，所以设计成一次性加短有效期。\n\n网站的写操作只接受 `application/json`，而且 `Origin` 必须是本站，用来防跨站请求。群应用只有确认登录人是群成员才能用；确认不了（比如缺权限）就一律拒绝。\n\n## 3. 执行身份凭证\n\n应用脚本要以执行人的身份调用后端服务（例如查数仓）时，Amber 会为**每次执行、每个声明的服务**签发一张短时效凭证。服务方只要信任 Amber 的公钥，不需要信任 Amber 的进程，更不需要信任脚本。\n\n### 3.1 Amber 保证什么\n\n| 保证 | 怎么做到 |\n|---|---|\n| 执行人可靠 | 只来自上面第 1 节的飞书事件或网站登录 |\n| 代码经过审核 | 认领人先试运行，所有审核人同意后应用才生效。凭证里的 `rev` 是审核通过那一版定义的哈希，每次执行前都会重新计算核对 |\n| 数据不外传 | 声明了服务的脚本，沙盒只放行这些服务的本机端口或 unix socket，外网和其他本机端口全部断开。声明服务和开放外网不能同时选，提交草稿时就会被拒绝 |\n| 用途受限 | 一张凭证只对一个服务有效（`aud` 由 Amber 配置决定，脚本改不了）；5 分钟过期；带一次性编号 `jti`；每次签发都写审计 |\n\n### 3.2 格式\n\nJWS Compact（即 JWT），算法 EdDSA（Ed25519）。\n\n```text\nheader  { \"alg\": \"EdDSA\", \"typ\": \"JWT\", \"kid\": \"\u003c公钥指纹>\" }\npayload {\n  \"iss\": \"amber\",\n  \"aud\": \"data-mcp\",          服务名，取自 Amber 配置 services.\u003c名称>.audience\n  \"sub\": \"on_…\",              执行人的飞书 union_id\n  \"cmd\": \"9bba8b5d\",          应用 id\n  \"rev\": \"075b025f…\",         应用定义哈希（审核通过的那一版）\n  \"run\": \"85df3e7f\",          本次执行 id\n  \"chat\": \"oc_…\",             应用所属的群或私聊\n  \"channel\": \"bot\",           bot / web / agent / schedule；试运行时加 .trial，例如 bot.trial\n  \"call_index\": 1,            这是本次执行的第几张凭证（从 1 开始）\n  \"call_count\": 2,            本次执行对这个服务一共签了几张，等于脚本声明的 calls\n  \"iat\": 1791389686, \"exp\": 1791389986,\n  \"jti\": \"uuid\"\n}\n```\n\n### 3.3 配置服务\n\n在 Amber 的 `config.json` 里登记服务：\n\n```json\n\"services\": {\n  \"data-mcp\": { \"audience\": \"data-mcp\", \"tcpPort\": 8765 }\n}\n```\n\n> 例子里的 data-mcp 是企业内部的数仓应用，Amber 把它作为可信服务访问，见下面「已接入的服务：data-mcp」。\n\n`tcpPort` 也可以换成 `\"unixSocket\": \"/path/to/service.sock\"`。应用脚本声明 `\"services\": {\"data-mcp\": {\"calls\": 2}}` 后（`calls` = 每次执行最多调用几次，1–20 的整数，随代码一起审核、计入版本哈希），运行时会从标准输入收到：\n\n```json\n{\"services\": {\"data-mcp\": {\"tokens\": [\"eyJhbGciOiJFZERTQSIs…\", \"eyJhbGciOiJFZERTQSIs…\"], \"tcpPort\": 8765}}}\n```\n\n`tokens` 按 `call_index` 排好序。脚本每次请求用一张，例如 `Authorization: Amber \u003ctoken>`，具体怎么带由服务方决定。每张都有独立的 `jti`，服务方应当**每张只接受一次**；用完就没有了，Amber 不会在运行中补签。旧写法 `\"services\": [\"data-mcp\"]` 提交时会被拒绝。\n\n### 3.4 服务方怎么验证\n\n1. **取公钥**：由 Amber 的部署方在 Amber 所在机器上运行 `node src/cli.ts keys`。它直接从已有的签名私钥文件推出公钥（JWKS 输出到标准输出，`kid` 输出到标准错误），**不经过任何端口、只读**：私钥不存在或权限对同组、其他用户开放时直接报错，不会生成新密钥。部署方把 JWKS 和 `kid` 通过部署记录交给服务方；服务方核对 `kid` 一致后，先写临时文件再 `mv` 原子替换，把公钥**整份写进服务自己的配置**。\n   - 不要用 `curl 127.0.0.1:7341/v1/keys` 建立信任：Amber 停掉时，本机任何进程都能占用 7341 端口冒充 Amber，那时固定下来的就是假钥匙。`/v1/keys` 只适合事后对照。\n   - 运行时也不要访问 7341。遇到配置里没有的 `kid` 直接拒绝。\n   - 局限：在 Amber 私钥改由专用系统用户持有之前，同一系统用户下的任何进程都能读私钥，凭证只能证明「来自这台机器上的这个用户」，不能证明来自 Amber 进程。\n2. **验签**：用 `kid` 对应的 Ed25519 公钥验证签名。\n3. **检查声明**：`iss == \"amber\"`，`aud ==` 本服务名，`exp` 没过期（建议允许 30 秒时钟误差）。\n4. **防重放**：持久化记录用过的 `jti`（保留到 `exp` 之后），重复的拒绝；只放内存在服务重启后会失效。`call_index`、`call_count` 以签名里的为准，请求体里的同名字段一律忽略。\n5. **以 `sub`（union_id）作为调用人**，走和其他入口完全相同的权限判断；请求体里自称的任何身份字段一律忽略。\n6. **审计**：记录 `caller_source = \"amber\"`，以及 `cmd`、`rev`、`run`、`channel`。\n\n服务方还可以自己决定一些策略，比如拒绝试运行（`channel` 以 `.trial` 结尾）、对 `schedule` 来源单独限流、限制能查的库表。这些都在服务方实现，Amber 不需要改动。\n\nNode.js（只用内置模块）：\n\n```js\nimport { createPublicKey, verify } from 'node:crypto';\n\nconst jwks = await (await fetch('http://127.0.0.1:7341/v1/keys')).json();\nconst keys = Object.fromEntries(jwks.keys.map(k => [k.kid, createPublicKey({ key: k, format: 'jwk' })]));\n\nfunction verifyAmber(token, audience) {\n  const [h, p, s] = token.split('.');\n  const header = JSON.parse(Buffer.from(h, 'base64url'));\n  const payload = JSON.parse(Buffer.from(p, 'base64url'));\n  const key = keys[header.kid];\n  if (header.alg !== 'EdDSA' || !key) throw new Error('unknown key');\n  if (!verify(null, Buffer.from(`${h}.${p}`), key, Buffer.from(s, 'base64url'))) throw new Error('bad signature');\n  const now = Date.now() / 1000;\n  if (payload.iss !== 'amber' || payload.aud !== audience || payload.exp \u003c now - 30) throw new Error('bad claims');\n  return payload;   // payload.sub 就是执行人的 union_id\n}\n```\n\nPython（需要 `cryptography`）：\n\n```python\nimport base64, json, time, urllib.request\nfrom cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey\n\ndef b64(s): return base64.urlsafe_b64decode(s + \"=\" * (-len(s) % 4))\n\njwks = json.load(urllib.request.urlopen(\"http://127.0.0.1:7341/v1/keys\"))\nKEYS = {k[\"kid\"]: Ed25519PublicKey.from_public_bytes(b64(k[\"x\"])) for k in jwks[\"keys\"]}\n\ndef verify_amber(token, audience):\n    h, p, s = token.split(\".\")\n    header, payload = json.loads(b64(h)), json.loads(b64(p))\n    key = KEYS.get(header.get(\"kid\"))\n    if header.get(\"alg\") != \"EdDSA\" or key is None:\n        raise ValueError(\"unknown key\")\n    key.verify(b64(s), f\"{h}.{p}\".encode())          # 签名不对会抛 InvalidSignature\n    if payload[\"iss\"] != \"amber\" or payload[\"aud\"] != audience or payload[\"exp\"] \u003c time.time() - 30:\n        raise ValueError(\"bad claims\")\n    return payload                                    # payload[\"sub\"] 就是执行人的 union_id\n```\n\n### 3.5 密钥\n\n私钥在 `~/.config/amber/signing-key.pem`（0600），首次启动时自动生成。轮换时让 `/v1/keys` 同时发布新旧两把公钥，用 `kid` 区分；等旧凭证全部过期后再撤掉旧的。目前只有一把固定密钥，轮换功能还没实现。\n\n### 3.6 已接入的服务：data-mcp\n\ndata-mcp 是企业内部的数仓应用（只读查数），Amber 把它作为可信服务、按上面的规则接入。它的 Amber 入口是一个单独的进程，只监听 `127.0.0.1`，默认端口 8766，部署时以 `config.json` 里 `services.data-mcp` 登记的端口为准，脚本一律读输入里的 `tcpPort`。\n\n**请求**：只有一个接口，一次请求里先校验 SQL、再执行，所以每次查询只消耗一张凭证，应用声明 `\"services\": {\"data-mcp\": {\"calls\": 1}}` 即可；要查几次就声明几次。\n\n```\nPOST /amber/query\nAuthorization: Amber \u003ctoken>\nContent-Type: application/json\n\n{\"sql\": \"SELECT …\", \"datasource\": \"tchouse-c\"}\n```\n\n- 请求体只接受 `sql` 和 `datasource` 两个字段（`datasource` 默认 `tchouse-c`），多带任何字段返回 422。执行人身份只取自凭证的 `sub`，请求体里没有、也不接受身份字段。\n- 每张凭证只能用一次。\n\n**响应**：\n\n| HTTP 状态 | 含义 |\n|---|---|\n| 200 | 请求被处理。是否成功看 body 里的 `status` |\n| 401 | 凭证缺失、验签失败或已过期，`detail` 是错误码，例如 `missing_amber_authorization` |\n| 409 | 凭证已经用过 |\n| 422 | 请求体字段不对 |\n| 429 | 定时执行（`channel` 为 `schedule`）超过限流，默认每分钟 10 次 |\n\n200 的 body 是 data-mcp 平常的查询结果，另加一个 `amber_audit_id`：\n\n| 字段 | 说明 |\n|---|---|\n| `status` | `success` / `validation_error` / `not_found` / `error`，只有 `success` 才算成功 |\n| `columns` | `[{\"name\", \"type\", …}]` |\n| `rows` | 对象数组，以列名为键 |\n| `row_count`、`truncated` | 行数，以及是否被截断 |\n| `quality_warnings` | 数据质量提示 |\n| `error_code`、`error_name`、`retryable` | 失败时的原因；校验没过时原因也可能在 `issues[].code` |\n| `query_id` | 本次查询的 id，排查时用 |\n\n**服务方策略**：试运行（`channel` 以 `.trial` 结尾）最多返回 20 行；定时执行单独限流。\n\n最小的 Python 脚本：\n\n```python\nimport json, sys, urllib.request, urllib.error\n\ninp = json.load(sys.stdin)\nsvc = inp[\"services\"][\"data-mcp\"]\nreq = urllib.request.Request(\n    f\"http://127.0.0.1:{svc['tcpPort']}/amber/query\",\n    data=json.dumps({\"sql\": \"SELECT 1 AS x\"}).encode(),\n    headers={\"Authorization\": \"Amber \" + svc[\"tokens\"][0], \"Content-Type\": \"application/json\"},\n)\nopener = urllib.request.build_opener(urllib.request.ProxyHandler({}))   # 不走代理\ntry:\n    r = json.load(opener.open(req, timeout=80))\nexcept urllib.error.HTTPError as e:\n    sys.exit(\"服务拒绝：\" + e.read().decode(\"utf-8\", \"replace\")[:300])\nif r.get(\"status\") != \"success\":\n    sys.exit(\"查询失败：\" + str(r.get(\"error_code\") or r.get(\"issues\") or r.get(\"status\"))[:300])\nprint(r[\"rows\"])\n```\n","nav":[{"name":"quickstart","title":"快速上手","group":"使用手册/业务开发人员","current":false},{"name":"chat","title":"Amber 机器人对话","group":"使用手册/业务开发人员","current":false},{"name":"with-agent","title":"和自己的 agent 协作","group":"使用手册/业务开发人员","current":false},{"name":"web","title":"网站操作","group":"使用手册/业务开发人员","current":false},{"name":"scenarios","title":"主要场景的实现方式","group":"使用手册/业务开发人员","current":false},{"name":"sharing","title":"应用的分享","group":"使用手册/业务开发人员","current":false},{"name":"faq","title":"常见问题","group":"使用手册/业务开发人员","current":false},{"name":"review","title":"审核指南","group":"使用手册/审核人员","current":false},{"name":"admin","title":"管理员手册","group":"使用手册/系统管理员","current":false},{"name":"install","title":"安装与部署","group":"安装运维","current":false},{"name":"feishu-setup","title":"飞书应用配置","group":"安装运维","current":false},{"name":"executor","title":"执行端与运行环境","group":"安装运维","current":false},{"name":"concepts","title":"概念模型","group":"概念模型与开发参考","current":false},{"name":"script","title":"脚本约定","group":"概念模型与开发参考","current":false},{"name":"cli-and-skill","title":"agent 接入：命令行、skill 与接口","group":"概念模型与开发参考","current":false},{"name":"identity","title":"可信身份","group":"概念模型与开发参考","current":true},{"name":"identity-example","title":"可信身份：完整示例","group":"概念模型与开发参考","current":false},{"name":"environment-format","title":"运行环境定义格式","group":"概念模型与开发参考","current":false},{"name":"usage","title":"使用指南（已拆分）","group":"","current":false}]};
 const REPO = 'https://github.com/xu4wang/amber/blob/main/';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Same anchor rule as GitHub, so links written for the repo keep working here.
@@ -121,6 +186,21 @@ doc.querySelectorAll('a[href]').forEach(a => {
   else if (/^\.\.\//.test(h)) { a.setAttribute('href', REPO + h.replace(/^\.\.\//, '')); a.target = '_blank'; a.rel = 'noopener'; }
   else if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
 });
+// Diagrams (assets/*.svg) are inlined so they take the page's light / dark colours.
+doc.querySelectorAll('img').forEach(async img => {
+  if (!/^assets\/[a-z0-9-]+\.svg$/.test(img.getAttribute('src') || '')) return;
+  try {
+    const r = await fetch(img.src);
+    if (!r.ok) return;
+    const box = document.createElement('div');
+    box.className = 'diagram';
+    box.innerHTML = DOMPurify.sanitize(await r.text(), { USE_PROFILES: { svg: true } });
+    const svg = box.querySelector('svg');
+    if (!svg) return;
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    img.replaceWith(box);
+  } catch {}
+});
 const toc = [];
 doc.querySelectorAll('h2, h3').forEach(h => { h.id = slug(h.textContent); if (h.tagName === 'H2') toc.push(h); });
 if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
@@ -129,13 +209,66 @@ if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
 });
 
 const cur = DATA.nav.find(n => n.current);
-document.getElementById('nav').innerHTML =
-  '<div class="group">使用</div>' + DATA.nav.slice(0, 2).map(n => link(n)).join('') +
-  '<div class="group">进阶</div>' + DATA.nav.slice(2).map(n => link(n)).join('');
+// Nav groups are "section/subgroup"; a page without a group stays out of the nav.
+// Each section folds. On every load only the section of the current page is open.
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const curSection = cur && cur.group ? cur.group.split('/')[0] : null;
+let navHtml = '', lastSection = null, lastSub = null;
+for (const n of DATA.nav) {
+  if (!n.group) continue;
+  const [section, sub] = n.group.split('/');
+  if (section !== lastSection) {
+    if (lastSection !== null) navHtml += '</details>';
+    const open = section === curSection;
+    navHtml += `<details class="sec" data-sec="${esc(section)}"${open ? ' open' : ''}><summary>${esc(section)}</summary>`;
+    lastSection = section; lastSub = null;
+  }
+  if (sub && sub !== lastSub) { navHtml += `<div class="group">${esc(sub)}</div>`; lastSub = sub; }
+  navHtml += link(n);
+}
+if (lastSection !== null) navHtml += '</details>';
+const nav = document.getElementById('nav');
+nav.innerHTML = navHtml;
+
+// The whole menu: hidden or shown on a wide screen (remembered), opened on demand on a phone.
+const btn = document.getElementById('navbtn');
+const phone = matchMedia('(max-width: 860px)');
+if (store.get('amber-docs-nav-hidden')) document.body.classList.add('nav-hidden');
+const shown = () => phone.matches ? document.body.classList.contains('nav-open') : !document.body.classList.contains('nav-hidden');
+const sync = () => btn.setAttribute('aria-expanded', String(shown()));
+btn.addEventListener('click', () => {
+  if (phone.matches) document.body.classList.toggle('nav-open');
+  else { document.body.classList.toggle('nav-hidden'); store.set('amber-docs-nav-hidden', document.body.classList.contains('nav-hidden')); }
+  sync();
+});
+phone.addEventListener('change', sync);
+nav.addEventListener('click', e => { if (phone.matches && e.target.closest('a')) document.body.classList.remove('nav-open'); });
+sync();
 function link(n) {
   const a = `<a href="${esc(n.name)}.html" class="${n.current ? 'cur' : ''}">${esc(n.title)}</a>`;
-  return n.current && toc.length ? a + '<div class="toc">' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('') + '</div>' : a;
+  return a;
 }
+// Light / dark: light unless this browser chose dark. Pages that draw with JS listen for "amber-theme".
+document.getElementById('themebtn').addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('amber-theme', dark ? 'dark' : 'light'); } catch {}
+  document.dispatchEvent(new Event('amber-theme'));
+});
+// This page's sections, in a column on the right; the one being read is highlighted.
+const tocEl = document.getElementById('toc');
+if (toc.length > 1) {
+  tocEl.innerHTML = '<div class="toc-title">本页目录</div>' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('');
+  const links = [...tocEl.querySelectorAll('a')];
+  const spy = () => {
+    let i = 0;
+    toc.forEach((h, k) => { if (h.getBoundingClientRect().top < 120) i = k; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) i = toc.length - 1;
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true });
+  spy();
+} else document.body.classList.add('no-toc');
 if (location.hash) { const t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView(); }
 </script>
 </body>

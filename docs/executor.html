@@ -2,21 +2,35 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>执行端 · Amber</title>
+<title>执行端与运行环境 · Amber</title>
 <link rel="icon" href="../logo.svg">
+<script>try { if (localStorage.getItem('amber-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
 <script src="../vendor/marked.min.js"></script>
 <script src="../vendor/purify.min.js"></script>
 <script src="../vendor/highlight.min.js"></script>
 <style>
 :root {
+  /* Light (default). The dark palette below applies when <html data-theme="dark">. */
+  color-scheme: light;
+  --bg: #ffffff; --panel: #ffffff; --card: #f4f4f4; --ink: #151515; --body-ink: #2b2b2b; --muted: #6b6b6b; --muted-2: #8f8f8f; --line: #e4e4e4; --line-2: #d2d2d2;
+  --accent: #f2a23a; --accent-press: #b8620e; --accent-hover: #ffb34d; --accent-ink: #a85a0c; --accent-soft: rgba(242, 162, 58, 0.18); --on-accent: #181818; --focus: #f2a23a; --ok: #03904a; --warn: #d92d20; --info: #2f7fa3;
+  --chip: #f0f0f0; --hover: #f2f2f2; --code-bg: #f6f6f6;
+  --hl-kw: #cf222e; --hl-str: #0a7d33; --hl-num: #b35900; --hl-cmt: #6e7781; --hl-fn: #0550ae; --hl-meta: #8250df;
+  --dg-bg: #ffffff; --dg-card: #f7f7f7; --dg-line: #c9c9c9; --dg-ink: #151515; --dg-muted: #5f5f5f; --dg-accent: #e0891c;
+  --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+:root[data-theme="dark"] {
   /* Cinematic dark: near-black canvas, one scarce Amber accent (the logo's #F2A23A), white type at weight 500, sharp corners. */
   --bg: #181818; --panel: #181818; --card: #303030; --ink: #ffffff; --muted: #969696; --muted-2: #666666; --line: #303030;
   --accent: #f2a23a; --accent-press: #b8620e; --accent-soft: rgba(242, 162, 58, 0.16); --on-accent: #181818; --ok: #03904a; --warn: #f13a2c; --info: #4c98b9;
   --chip: #303030; --hover: #222222; --code-bg: #111111;
   --hl-kw: #ff7b72; --hl-str: #a5d6a7; --hl-num: #ffb74d; --hl-cmt: #7d7d7d; --hl-fn: #90caf9; --hl-meta: #e5c07b;
   --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  color-scheme: dark;
+  --body-ink: #d6d6d6; --line-2: #444444; --accent-hover: #ffb34d; --accent-ink: #f2a23a; --focus: #ffd27a;
+  --dg-bg: #181818; --dg-card: #262626; --dg-line: #4a4a4a; --dg-ink: #ffffff; --dg-muted: #a8a8a8; --dg-accent: #f2a23a;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.75 "PingFang SC", "Noto Sans SC", system-ui, sans-serif; }
@@ -24,22 +38,21 @@ header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; bord
 header img { width: 28px; height: 28px; border-radius: 7px; }
 header .brand { font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
 header .back { margin-left: auto; color: var(--muted); font-size: 14px; text-decoration: none; }
-header .back:hover { color: var(--accent); }
+header .back:hover { color: var(--accent-ink); }
 header .gh { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; text-decoration: none; margin-left: 16px; }
-header .gh:hover { color: var(--accent); }
+header .gh:hover { color: var(--accent-ink); }
 header .gh svg { width: 18px; height: 18px; fill: currentColor; }
-.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr) 200px; max-width: 1400px; margin: 0 auto; }
 nav { padding: 24px 12px; border-right: 1px solid var(--line); font-size: 14px; position: sticky; top: 49px; align-self: start; max-height: calc(100vh - 49px); overflow: auto; }
 nav .group { color: var(--muted); font-size: 12px; margin: 14px 8px 4px; }
 nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
 nav a:hover { background: var(--accent-soft); }
-nav a.cur { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-nav .toc a { padding-left: 20px; color: var(--muted); font-size: 13px; }
+nav a.cur { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
 article { padding: 24px 40px 80px; min-width: 0; }
 article h1 { font-size: 28px; margin: 8px 0 16px; }
 article h2 { font-size: 21px; margin: 36px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
 article h3 { font-size: 17px; margin: 24px 0 8px; }
-article a { color: var(--accent); }
+article a { color: var(--accent-ink); }
 article table { border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
 article th, article td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
 article th { background: var(--panel); }
@@ -57,7 +70,6 @@ article blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid v
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   nav { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 12px; }
-  nav .toc { display: none; }
   article { padding: 16px 16px 60px; }
 }
 
@@ -73,39 +85,92 @@ nav .group { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; text-tran
 nav a { border-radius: 0; border-left: 2px solid transparent; color: var(--muted); }
 nav a:hover { background: none; color: var(--ink); }
 nav a.cur { background: none; color: var(--ink); font-weight: 600; border-left-color: var(--accent); }
-nav .toc a { color: var(--muted-2); }
-nav .toc a:hover { color: var(--ink); }
-article { padding: 48px 56px 128px; color: #d6d6d6; }
+article { padding: 48px 56px 128px; color: var(--body-ink); }
 article h1 { font-size: 56px; font-weight: 500; letter-spacing: -1.12px; line-height: 1.1; color: var(--ink); margin: 8px 0 32px; }
 article h2 { font-size: 26px; font-weight: 500; letter-spacing: 0.2px; color: var(--ink); border-top: 1px solid var(--line); margin: 64px 0 16px; padding-top: 32px; }
 article h3 { font-size: 18px; font-weight: 500; color: var(--ink); }
 article strong { color: var(--ink); font-weight: 600; }
 article a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
-article a:hover { color: var(--accent); }
+article a:hover { color: var(--accent-ink); }
 article table { font-size: 14px; }
 article th { background: var(--card); color: var(--ink); font-weight: 600; }
-article th, article td { border-color: #3a3a3a; }
+article th, article td { border-color: var(--line-2); }
 article code { background: var(--card); border-radius: 0; color: var(--ink); }
 article pre { background: var(--code-bg); border: none; border-radius: 0; }
 article pre code { background: none; }
-article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: #d6d6d6; padding: 12px 20px; }
+article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: var(--body-ink); padding: 12px 20px; }
 article hr { border: none; border-top: 1px solid var(--line); }
+article img { display: block; max-width: 100%; height: auto; margin: 24px 0; }
+article .diagram { margin: 24px 0; }
+article .diagram svg { display: block; width: 100%; max-width: 960px; height: auto; }
 @media (max-width: 860px) { article { padding: 24px 16px 64px; } article h1 { font-size: 32px; } }
+
+/* ---- Collapsible menu: sections fold, and the whole menu can be hidden ---- */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-left: -8px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; }
+.navbtn:hover, .navbtn:focus-visible { color: var(--ink); border-color: var(--line); outline: none; }
+.navbtn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+nav details.sec { margin: 0; }
+nav details.sec + details.sec { margin-top: 12px; }
+nav details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 10px 4px; padding: 6px 0; border-bottom: 1px solid var(--line); user-select: none; }
+nav details.sec > summary::-webkit-details-marker { display: none; }
+nav details.sec > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; margin-right: 4px; }
+nav details.sec[open] > summary::after { transform: rotate(45deg); }
+nav details.sec > summary:hover::after { border-color: var(--ink); }
+nav details.sec > summary:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+nav details.sec .group:first-of-type { margin-top: 12px; }
+body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr) 200px; max-width: 1180px; }
+/* This page's sections, on the right. */
+aside#toc { position: sticky; top: 65px; align-self: start; max-height: calc(100vh - 65px); overflow: auto; padding: 48px 16px 32px 0; font-size: 13px; }
+aside#toc .toc-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted-2); margin: 0 0 10px 12px; }
+aside#toc a { display: block; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; line-height: 1.5; }
+aside#toc a:hover { color: var(--ink); }
+aside#toc a.on { color: var(--ink); border-left-color: var(--accent); }
+body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+body.no-toc aside#toc { display: none; }
+@media (max-width: 1180px) {
+  .layout, body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+  body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+  aside#toc { display: none; }
+}
+@media (max-width: 860px) {
+  .layout, body.no-toc .layout, body.nav-hidden .layout, body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); }
+}
+body.nav-hidden nav { display: none; }
+@media (max-width: 860px) {
+  /* On a phone the menu starts hidden; the button opens it above the page. */
+  body:not(.nav-open) nav { display: none; }
+  body.nav-hidden.nav-open nav { display: block; }
+  header { gap: 8px; padding: 0 12px; }
+  header > span { display: none; }
+  header .back, header .gh { white-space: nowrap; }
+  header .gh { margin-left: 4px; }
+}
+
+/* ---- Light / dark switch ---- */
+.themebtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; letter-spacing: 0; }
+.themebtn:hover, .themebtn:focus-visible { background: none; color: var(--ink); border-color: var(--line); outline: none; }
+.themebtn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.themebtn .i-sun, :root[data-theme="dark"] .themebtn .i-moon { display: none; }
+:root[data-theme="dark"] .themebtn .i-sun { display: inline; }
 </style>
 </head>
 <body>
 <header>
+  <button class="navbtn" id="navbtn" type="button" aria-controls="nav" aria-expanded="true" title="收起 / 展开目录"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
   <img src="../logo.svg" alt="">
   <a class="brand" href="../">Amber</a><span style="color:var(--muted)">文档</span>
   <a class="back" href="../">▶ 视频手册</a>
+  <button class="themebtn" id="themebtn" type="button" title="切换浅色 / 深色"><svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg><svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M4 16l1.4-1.4M14.6 5.4 16 4"/></svg></button>
   <a class="gh" href="https://github.com/xu4wang/amber" target="_blank" rel="noopener" title="GitHub 仓库"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
 </header>
 <div class="layout">
   <nav id="nav"></nav>
   <article id="doc"></article>
+  <aside id="toc" aria-label="本页目录"></aside>
 </div>
 <script>
-const DATA = {"md":"# 执行端：在数据所在的机器上执行应用\n\n有些应用要读机器人在自己机器上建的数据，比如台账、导出目录。这些数据不在 Amber 的机器上。**执行端**是装在数据所在机器上的一个小程序：Amber 把审核通过的应用交给它，它在本机的一个**运行环境**里执行，再把结果交回 Amber。结果卡片、运行记录、定时任务、网站和以前完全一样。\n\n执行端是通用的：Amber 不关心那台机器是谁的、跑着哪个机器人、数据是什么格式。应用只写明在哪个执行端的哪个环境里跑（随代码审核）；能访问哪些数据，完全由那个环境决定（由管理员批准）。\n\n## 概念：机器、执行端、运行环境、沙箱\n\n| 概念 | 是什么 | 谁来定 | 什么时候生效 |\n|---|---|---|---|\n| 机器 | 应用实际执行的那台电脑。不写 `env` 的应用在 Amber 所在的机器上执行 | — | — |\n| 执行端 | 装在某台机器上的 Amber 执行程序，一台机器一个，名字一般就是机器名 | 机器的主人安装，管理员核对公钥指纹后批准 | 批准后一直有效，直到撤销 |\n| 运行环境（env） | 执行端上一个有名字的**权限范围**：能读写哪些路径、只读哪些、禁止哪些，以及 `{WORKDIR}`、Python、给脚本的环境变量。一个执行端可以有多个（最多 20 个） | 机器的主人登记（一份 JSON 定义，可以用 env set 生成，或从 botmux 机器人导出），管理员批准；增加或修改都要重新批准 | 批准后一直有效 |\n| `{WORKDIR}` | 运行环境的主目录。脚本从环境变量 `WORKDIR` 拿到它 | 由运行环境决定 | — |\n| 沙箱 | 执行时按运行环境的权限临时生成的隔离规则，保证脚本访问不到环境以外的东西 | 不由人写，自动生成 | 每次执行时生成，执行完就消失 |\n\n它们之间的关系：\n\n- **一个应用 = 在哪里跑（`env`，可不写）+ 代码**。应用里**不写任何路径**，能访问什么完全由运行环境决定。\n- **不写 `env` 的应用**在 Amber 本机跑，不访问任何业务数据：系统目录和常用工具链只读；只能读写本次运行的临时目录（也是当前目录和 `HOME`）。\n- **运行环境不会自动创建**：应用只能引用已经登记、批准过的环境；引用不存在的环境，认领卡上会提示，执行时失败。\n- **同一个运行环境里的应用权限相同**。需要区分时，就登记不同的环境，比如同一个机器人登记「结算助手」（可读写）和「结算助手-只读」两个环境，报表类应用用只读的那个。\n- **运行环境就是一份访问规则（JSON 定义文件）**，执行端只有这一种机制。生成它有两种快捷方式，也可以手写后 `env import`：\n  - `env set 名字 目录`：最简单的一份，`{WORKDIR}` 这个目录可读写（加 `--readonly` 只读）。\n  - `export-botmux-env.mjs`：从 botmux 机器人导出，和这个机器人在 botmux 沙箱里能访问的数据完全一样（工作目录、角色库、机器人目录、bots.json 里配的路径、它自己的 lark-cli 飞书身份），只去掉 botmux 的发消息凭证。脚本里用 lark-cli，用的就是这个机器人的身份，和它的会话一致。\n- **联网**仍由应用自己声明（`network: true`），随代码审核；联网和调用内部服务二选一。\n- **调用 Amber 上登记的服务**（比如 data-mcp）：管理员允许的服务，执行端上的应用也能调用，写法和在 Amber 本机完全一样，见下面「调用 Amber 上登记的服务」。\n- **任何环境都打不开的**：Amber 和执行端自己的配置目录（签名私钥、加密密钥、数据库）、`~/.ssh`、钥匙串。其他凭证目录（`~/.botmux`、`~/.lark-cli-bots`、`~/.claude` 等）默认也打不开，只有环境里明确列出的那一部分才开放，批准卡上会单独标出「含凭证路径」。\n\n## 工作方式\n\n```\n应用（审核过）── Amber ──签名+加密的任务──▶ 执行端（数据所在的机器）\n                  ▲                              │ 验签、核对规格哈希\n                  └──────────结果（已遮盖密钥）───┘ 按运行环境的权限执行\n```\n\n- **只注册一次**：执行端第一次启动时在本机生成密钥（私钥不离开这台机器），把名字、环境列表和公钥发给 Amber 申请登记。\n- **管理员批准**：Amber 给每位管理员发一张卡片，上面有来源机器、每个环境的全部路径和**公钥指纹**。管理员和安装的人核对指纹一致后点「批准」。批准前不会派任何任务。\n- **执行端主动连 Amber**：执行端一直保持一个长连接等任务，这个连接本身就是心跳。不用在执行端那台机器上开端口。\n- **任务**：由 Amber 的签名密钥签名，内容（代码、参数、密钥）用执行端的公钥加密。执行端要逐项检查：签名、收件人是不是自己、有没有过期、是不是重复的任务；然后重新计算规格哈希，和审核通过的版本比对。都通过才执行。\n- **执行**：按运行环境的权限生成沙箱后执行，规则和 Amber 本机完全相同（执行端的这部分代码是从 Amber 的源码生成的）。当前目录是每次执行新建的临时目录。执行端自己的密钥，任何环境都打不开（这一个约束的是应用脚本；同一系统用户下沙箱外的其他进程见下面「用哪个系统用户安装」）。\n- **离线不补跑**：执行端离线（约 1 分钟没联系）时，派给它的应用立即失败，结果卡写明「执行端离线」。任务 30 秒内没被取走，或者超过脚本超时还没有返回，也会失败。失败的任务不会在执行端恢复后补跑。\n\n以下情况需要**重新批准**：\n\n| 情况 | 说明 |\n|---|---|\n| 换了密钥 | 重装、换机器、私钥丢失。新密钥是一次新的申请 |\n| 环境变了 | 增加、删除环境，或者改了环境的任何内容（路径、Python、环境变量）。批准失效，直到管理员批准新的内容 |\n| 被撤销 | 管理员撤销后立即生效；要恢复，得重新生成密钥再申请 |\n\n重启服务、重启机器、断网后重新连上，都不需要重新批准。\n\n## 安装（在数据所在的机器上）\n\n要求：macOS，Node 22 或更新版本。这台机器的 IP 要在 Amber 的白名单里，和 agent 用 `amber` 命令的要求一样。\n\n```bash\n# 1. 拿到代码（只用 client/amber-executor 这个目录，不需要安装依赖）\ngit clone https://github.com/xu4wang/amber.git ~/amber\n\n# 2. 初始化：起个名字（小写字母、数字、连字符）。Amber 地址默认读 amber 命令的配置\nnode ~/amber/client/amber-executor/amber-executor.mjs init --name ledger-mac\n#    输出里有「公钥指纹」，记下来，等会儿要和管理员核对\n\n# 3. 放运行环境：~/.config/amber-executor/envs/ 里一个 \u003c环境名>.json 就是一个环境。下面几种方式都只是往这里写文件\n#  a. 用一个目录生成：这个目录可读写（加 --readonly 就是只读）；需要第三方包时用 --python 指定解释器\nnode ~/amber/client/amber-executor/amber-executor.mjs env set 台账 /Users/me/bots/ledger --python /Users/me/venvs/ledger/bin/python3\n#  b. 从 botmux 导出某个机器人的访问权限，直接写进文件夹\nnode ~/amber/client/amber-executor/export-botmux-env.mjs --bot cli_xxxx --name 结算助手 --python /opt/homebrew/bin/python3 --out ~/.config/amber-executor/envs/结算助手.json\n#     只读版本：导出时加 --readonly，写成另一个文件名\n#  c. 手写或别处生成的定义：… env import 文件.json（先校验再放进文件夹），或者直接复制进去\n#  查看：… env show；看某个环境的文件：… env export 台账；删除：… env rm 台账（或直接删文件）\n\n# 4. 常驻运行（launchd，开机自动启动），同时向 Amber 申请登记\nnode ~/amber/client/amber-executor/amber-executor.mjs install-launchd\n\n# 5. 查看状态；管理员批准后这里显示「已批准」\nnode ~/amber/client/amber-executor/amber-executor.mjs status\n```\n\n配置和密钥在 `~/.config/amber-executor/`（目录权限 700，密钥文件 600），日志在同一目录的 `executor.log`。停用：`… uninstall-launchd`。\n\n**用哪个系统用户安装**：文件权限只挡得住其他用户，挡不住同一个用户的其他进程。同一用户下没有沙箱的进程（比如不开沙箱的机器人、agent）都能读到执行端的私钥，拿到私钥就能冒充这个执行端、解密派给它的任务，包括里面的密钥。所以：\n\n- 最稳妥的做法是给执行端单独建一个系统用户，用它安装、运行（数据目录给这个用户读权限）；\n- 如果装在和机器人相同的用户下，就等于信任这个用户下的所有进程，只适合这些进程本来就可信的机器；或者它们都在沙箱里，并且确认沙箱挡住了 `~/.config/amber-executor/`。批准时管理员要知道是哪种情况。\n\n### 环境文件夹：改了怎么生效\n\n执行端每 5 分钟读一次 `~/.config/amber-executor/envs/`，有变化就重新登记到 Amber：\n\n| 文件夹里的变化 | 结果 |\n|---|---|\n| 新放进一个文件 | 新增环境，**要管理员批准**（批准前这个执行端的所有环境暂停） |\n| 改了已有文件里的路径、环境变量、Python | **直接生效**，Amber 给管理员发变化通知卡：新增和去掉了哪些路径，新增的凭证路径标红，卡上可以直接撤销这个执行端 |\n| 改了已有文件里的 `workdir`、`source`、`realHome` | **要管理员批准** |\n| 删掉一个文件 | 去掉这个环境（只会缩小权限），**直接生效**，通知管理员 |\n| 文件损坏或校验不通过 | 保留它上一次的有效内容，在执行端日志里记一条，不登记变化 |\n\n变化只对之后派发的任务生效：已经在运行的脚本按开始时的权限跑完（最长到脚本超时，不超过 120 秒）。撤销执行端也一样：Amber 立刻停止派任务、不再接收结果、取消它还在进行的服务请求，但已经启动的脚本仍会跑到结束或超时。\n\n想马上生效，不等 5 分钟：`launchctl kickstart -k gui/$(id -u)/com.amber.executor`。等待批准期间文件又变了，新的申请里会带上最新内容。\n\n**跟随 botmux 机器人的配置**：机器人在 botmux 里的配置改了以后，**手工再跑一次导出命令**（上面安装第 3 步 b，`--out` 写回同一个文件），执行端会按上表自动处理；导出工具只有内容真的变了才会改写文件。可选：在导出命令后面加 `--install-launchd`，装成每 5 分钟自动导出一次的定时任务（`--uninstall-launchd` 移除）。\n\n执行端只认这个文件夹里的文件，不知道 botmux 的存在；`export-botmux-env.mjs` 是 botmux 的适配层，以后 botmux 能直接输出这个文件，就不需要它了。\n\n旧版本把环境记在 `config.json` 里，升级后执行端第一次启动会把它们原样搬进这个文件夹，内容不变，不需要重新批准。\n\n\n初始化时执行端会记下 Amber 的签名公钥，之后只接受这把钥匙签的任务。Amber 换了签名密钥时，执行端会拒绝所有任务；确认是 Amber 自己换的之后，重新运行 `init … --repin`。\n\n## 管理员\n\n- 收到「执行端申请登记」卡片时，**先和安装的人核对公钥指纹**，再看来源机器和各环境的目录是否合理，然后批准或拒绝。\n- 私聊 Amber 发「**执行端**」：列出所有执行端，包括状态、是否在线、最后在线时间。\n- 发「**撤销执行端 名称**」：立即撤销，之后不再给它派任务，正在等结果的任务立即失败。\n- **网站**：管理员在网站左侧会看到「执行端（管理员）」，能查看每个执行端的状态、是否在线、环境目录和公钥指纹，并在页面上批准、拒绝或撤销，效果和飞书卡片一样。其他人看不到这一栏。\n\n## 环境定义文件\n\n运行环境用一份 JSON 定义，放在执行端的 `envs/` 文件夹里；`env set`、`env import` 和 `export-botmux-env.mjs --out` 只是往这个文件夹写文件的几种方式，`env export` 打印某个环境的文件。格式的完整说明（字段、路径解析、规则优先级、强制拒绝、校验清单、怎么映射到沙箱）见 **[运行环境定义格式](environment-format.md)**。这是一份独立于 Amber 的格式，其他 agent 平台、沙箱都可以照着生成或使用。\n\n## 写应用（给 agent）\n\n在 `script` 里加 `env`，**不写任何路径**：\n\n```json\n\"script\": {\n  \"kind\": \"script\", \"lang\": \"python\",\n  \"env\": \"ledger-mac/结算助手\",\n  \"code\": \"import os\\nroot = os.environ['WORKDIR']\\n…\"\n}\n```\n\n- 脚本能访问的，就是这个环境能访问的；用绝对路径访问（当前目录是临时目录），`WORKDIR` 从环境变量取。\n- 要联网写 `\"network\": true`。要调用 Amber 上登记的服务（比如 data-mcp），照常写 `services`，见下一节。\n- 认领卡和审核文档的「执行位置」一行会列出这个环境能访问的路径。执行端还没批准时，也可以先提交草稿和审核，只是试运行会提示「还没有被管理员批准」。\n- 不知道有哪些环境时问用户；管理员私聊 Amber 发「执行端」，或在网站的执行端管理页查看。\n\n## 调用 Amber 上登记的服务\n\ndata-mcp 这类服务装在 Amber 那台机器上，只监听本机。执行端上的应用照样可以调用，**脚本写法和在 Amber 本机完全一样**：\n\n```python\nsvc = inp[\"services\"][\"data-mcp\"]\nreq = urllib.request.Request(f\"http://127.0.0.1:{svc['tcpPort']}/amber/query\",\n    data=json.dumps({\"sql\": SQL}).encode(),\n    headers={\"Authorization\": \"Amber \" + svc[\"tokens\"][0], \"Content-Type\": \"application/json\"})\n```\n\n怎么做到的：\n\n1. 执行端在本机 `127.0.0.1` 上为这次任务开一个端口，把输入里的 `tcpPort` 换成它；沙箱只允许脚本连这个端口（macOS 沙箱只能限制到「本机端口」或「任何地址」，所以必须这样转一手）。这个端口只接受带着这次任务的凭证、并且这张凭证还没用过的请求，所以本机其他进程连上来也用不了；最多 8 个连接，请求要在 30 秒内发完。\n2. 脚本的请求（路径、请求体、`Authorization`、`Content-Type`、`Accept` 头）由执行端加上自己的签名，原样转给 Amber 的 `/v1/executor/relay`。\n3. Amber 核对：请求来自这次任务派给的那个执行端、任务正在运行、应用声明了这个服务、调用次数没超过声明的 `calls`、这个服务允许执行端调用。通过后原样转给本机的服务，再把响应原样带回。Amber 不读请求和响应的内容；身份凭证照常由服务自己校验。任务一结束（出结果、超时、执行端被撤销），还没完成的服务请求会被取消。\n\n限制：\n\n- 只有管理员在 Amber 配置里为服务打开了 `\"executor\": true` 的才能调用（data-mcp 已打开）；没打开的，提交草稿时就拒绝。\n- 只支持 HTTP 的 GET / POST，请求最大 512KB，响应最大 4MB，单次 60 秒超时；不支持流式响应和 websocket。\n- 只提供 `tcpPort`，不提供 `unixSocket`。\n- 调用服务的应用仍然不能联网，查出来的数据只能输出到结果里。\n- 执行端和 Amber 之间是普通 HTTP，查询和结果明文经过内网，可能被同网段看到（和其他执行结果一样）。但改不了、也冒用不了：转发请求带执行端的签名和一次性随机数，只对这次任务有效；Amber 的响应带 Amber 的签名并绑定到这一次请求，执行端核对不通过就不交给脚本。\n\n## 安全边界\n\n- 管理员批准的是**一把公钥 + 一组目录**。没有私钥的人冒充不了执行端：每个请求都有签名，并且带时间戳和一次性随机数，旧请求重放无效。\n- Amber 和执行端之间走普通 HTTP。任务内容是加密的，密钥不会以明文经过网络。结果正文本身是明文，和网站、接口一样，只适合在内网使用。\n- 「遮盖密钥」只是把输出里**原样出现**的密钥值换成 `***`（执行端和 Amber 各做一次）。它拦不住脚本把密钥变形后输出，也拦不住开了联网的脚本把密钥或数据发出去；环境允许读的文件，脚本也可以原样打印出来。这些都要靠审核把关：看代码怎么用密钥，看联网和读写目录是否必要。\n- 执行端的私钥由运行它的系统用户保护，同一用户下的其他进程能读到，见上面「用哪个系统用户安装」。\n- 执行端只跑签名有效、规格哈希与审核版本一致的代码，访问范围是那个运行环境批准过的路径。批准环境时要看清每一条路径，特别是标出的凭证路径；审核应用时要看它选了哪个环境、代码怎么用这些数据。\n- 执行端以安装它的那个系统用户运行。不要用有特殊权限的账号安装。\n\n## nginx\n\n执行端用的是 `/v1/executor/…` 接口，和 agent 接口走同一个 `location /v1/`，不用另外配置。结果最大约 256KB，建议把 `client_max_body_size` 调到 `1m`。\n","nav":[{"name":"usage","title":"使用指南","current":false},{"name":"sharing","title":"应用的分享","current":false},{"name":"cli-and-skill","title":"amber 命令行与 skill","current":false},{"name":"executor","title":"执行端","current":true},{"name":"environment-format","title":"运行环境定义格式","current":false},{"name":"identity","title":"可信身份","current":false},{"name":"identity-example","title":"可信身份：完整示例","current":false},{"name":"install","title":"安装与部署","current":false},{"name":"feishu-setup","title":"飞书应用配置","current":false}]};
+const DATA = {"md":"# 执行端：在数据所在的机器上执行应用\n\n有些应用要读机器人在自己机器上建的数据，比如台账、导出目录。这些数据不在 Amber 的机器上。**执行端**是装在数据所在机器上的一个小程序：Amber 把审核通过的应用交给它，它在本机的一个**运行环境**里执行，再把结果交回 Amber。结果卡片、运行记录、定时任务、网站和以前完全一样。\n\n执行端是通用的：Amber 不关心那台机器是谁的、跑着哪个机器人、数据是什么格式。应用只写明在哪个执行端的哪个环境里跑（随代码审核）；能访问哪些数据，完全由那个环境决定（由管理员批准）。\n\n## 概念：机器、执行端、运行环境、沙箱\n\n| 概念 | 是什么 | 谁来定 | 什么时候生效 |\n|---|---|---|---|\n| 机器 | 应用实际执行的那台电脑。不写 `env` 的应用在 Amber 所在的机器上执行 | — | — |\n| 执行端 | 装在某台机器上的 Amber 执行程序，一台机器一个，名字一般就是机器名 | 机器的主人安装，管理员核对公钥指纹后批准 | 批准后一直有效，直到撤销 |\n| 运行环境（env） | 执行端上一个有名字的**权限范围**：能读写哪些路径、只读哪些、禁止哪些，以及 `{WORKDIR}`、Python、给脚本的环境变量。一个执行端可以有多个（最多 20 个） | 机器的主人登记（一份 JSON 定义，可以用 env set 生成，或从 botmux 机器人导出），管理员批准；增加或修改都要重新批准 | 批准后一直有效 |\n| `{WORKDIR}` | 运行环境的主目录。脚本从环境变量 `WORKDIR` 拿到它 | 由运行环境决定 | — |\n| 沙箱 | 执行时按运行环境的权限临时生成的隔离规则，保证脚本访问不到环境以外的东西 | 不由人写，自动生成 | 每次执行时生成，执行完就消失 |\n\n它们之间的关系：\n\n- **一个应用 = 在哪里跑（`env`，可不写）+ 代码**。应用里**不写任何路径**，能访问什么完全由运行环境决定。\n- **不写 `env` 的应用**在 Amber 本机跑，不访问任何业务数据：系统目录和常用工具链只读；只能读写本次运行的临时目录（也是当前目录和 `HOME`）。\n- **运行环境不会自动创建**：应用只能引用已经登记、批准过的环境；引用不存在的环境，认领卡上会提示，执行时失败。\n- **同一个运行环境里的应用权限相同**。需要区分时，就登记不同的环境，比如同一个机器人登记「结算助手」（可读写）和「结算助手-只读」两个环境，报表类应用用只读的那个。\n- **运行环境就是一份访问规则（JSON 定义文件）**，执行端只有这一种机制。生成它有两种快捷方式，也可以手写后 `env import`：\n  - `env set 名字 目录`：最简单的一份，`{WORKDIR}` 这个目录可读写（加 `--readonly` 只读）。\n  - `export-botmux-env.mjs`：从 botmux 机器人导出，和这个机器人在 botmux 沙箱里能访问的数据完全一样（工作目录、角色库、机器人目录、bots.json 里配的路径、它自己的 lark-cli 飞书身份），只去掉 botmux 的发消息凭证。脚本里用 lark-cli，用的就是这个机器人的身份，和它的会话一致。\n- **联网**仍由应用自己声明（`network: true`），随代码审核；联网和调用内部服务二选一。\n- **调用 Amber 上登记的服务**（比如 data-mcp，企业内部的数仓应用，Amber 把它作为可信服务访问）：管理员允许的服务，执行端上的应用也能调用，写法和在 Amber 本机完全一样，见下面「调用 Amber 上登记的服务」。\n- **任何环境都打不开的**：Amber 和执行端自己的配置目录（签名私钥、加密密钥、数据库）、`~/.ssh`、钥匙串。其他凭证目录（`~/.botmux`、`~/.lark-cli-bots`、`~/.claude` 等）默认也打不开，只有环境里明确列出的那一部分才开放，批准卡上会单独标出「含凭证路径」。\n\n## 工作方式\n\n![执行端的工作方式：Amber 把签名并加密的任务发给执行端，执行端验签、核对代码哈希后按运行环境的权限执行，把遮盖了密钥的结果返回](assets/executor-flow.svg)\n\n- **只注册一次**：执行端第一次启动时在本机生成密钥（私钥不离开这台机器），把名字、环境列表和公钥发给 Amber 申请登记。\n- **管理员批准**：Amber 给每位管理员发一张卡片，上面有来源机器、每个环境的全部路径和**公钥指纹**。管理员和安装的人核对指纹一致后点「批准」。批准前不会派任何任务。\n- **执行端主动连 Amber**：执行端一直保持一个长连接等任务，这个连接本身就是心跳。不用在执行端那台机器上开端口。\n- **任务**：由 Amber 的签名密钥签名，内容（代码、参数、密钥）用执行端的公钥加密。执行端要逐项检查：签名、收件人是不是自己、有没有过期、是不是重复的任务；然后重新计算规格哈希，和审核通过的版本比对。都通过才执行。\n- **执行**：按运行环境的权限生成沙箱后执行，规则和 Amber 本机完全相同（执行端的这部分代码是从 Amber 的源码生成的）。当前目录是每次执行新建的临时目录。执行端自己的密钥，任何环境都打不开（这一个约束的是应用脚本；同一系统用户下沙箱外的其他进程见下面「用哪个系统用户安装」）。\n- **离线不补跑**：执行端离线（约 1 分钟没联系）时，派给它的应用立即失败，结果卡写明「执行端离线」。任务 30 秒内没被取走，或者超过脚本超时还没有返回，也会失败。失败的任务不会在执行端恢复后补跑。\n\n以下情况需要**重新批准**：\n\n| 情况 | 说明 |\n|---|---|\n| 换了密钥 | 重装、换机器、私钥丢失。新密钥是一次新的申请 |\n| 环境变了 | 增加、删除环境，或者改了环境的任何内容（路径、Python、环境变量）。批准失效，直到管理员批准新的内容 |\n| 被撤销 | 管理员撤销后立即生效；要恢复，得重新生成密钥再申请 |\n\n重启服务、重启机器、断网后重新连上，都不需要重新批准。\n\n## 安装（在数据所在的机器上）\n\n要求：macOS，Node 22 或更新版本。这台机器的 IP 要在 Amber 的白名单里，和 agent 用 `amber` 命令的要求一样。\n\n```bash\n# 1. 拿到代码（只用 client/amber-executor 这个目录，不需要安装依赖）\ngit clone https://github.com/xu4wang/amber.git ~/amber\n\n# 2. 初始化：起个名字（小写字母、数字、连字符）。Amber 地址默认读 amber 命令的配置\nnode ~/amber/client/amber-executor/amber-executor.mjs init --name ledger-mac\n#    输出里有「公钥指纹」，记下来，等会儿要和管理员核对\n\n# 3. 放运行环境：~/.config/amber-executor/envs/ 里一个 \u003c环境名>.json 就是一个环境。下面几种方式都只是往这里写文件\n#  a. 用一个目录生成：这个目录可读写（加 --readonly 就是只读）；需要第三方包时用 --python 指定解释器\nnode ~/amber/client/amber-executor/amber-executor.mjs env set 台账 /Users/me/bots/ledger --python /Users/me/venvs/ledger/bin/python3\n#  b. 从 botmux 导出某个机器人的访问权限，直接写进文件夹\nnode ~/amber/client/amber-executor/export-botmux-env.mjs --bot cli_xxxx --name 结算助手 --python /opt/homebrew/bin/python3 --out ~/.config/amber-executor/envs/结算助手.json\n#     只读版本：导出时加 --readonly，写成另一个文件名\n#  c. 手写或别处生成的定义：… env import 文件.json（先校验再放进文件夹），或者直接复制进去\n#  查看：… env show；看某个环境的文件：… env export 台账；删除：… env rm 台账（或直接删文件）\n\n# 4. 常驻运行（launchd，开机自动启动），同时向 Amber 申请登记\nnode ~/amber/client/amber-executor/amber-executor.mjs install-launchd\n\n# 5. 查看状态；管理员批准后这里显示「已批准」\nnode ~/amber/client/amber-executor/amber-executor.mjs status\n```\n\n配置和密钥在 `~/.config/amber-executor/`（目录权限 700，密钥文件 600），日志在同一目录的 `executor.log`。停用：`… uninstall-launchd`。\n\n**用哪个系统用户安装**：文件权限只挡得住其他用户，挡不住同一个用户的其他进程。同一用户下没有沙箱的进程（比如不开沙箱的机器人、agent）都能读到执行端的私钥，拿到私钥就能冒充这个执行端、解密派给它的任务，包括里面的密钥。所以：\n\n- 最稳妥的做法是给执行端单独建一个系统用户，用它安装、运行（数据目录给这个用户读权限）；\n- 如果装在和机器人相同的用户下，就等于信任这个用户下的所有进程，只适合这些进程本来就可信的机器；或者它们都在沙箱里，并且确认沙箱挡住了 `~/.config/amber-executor/`。批准时管理员要知道是哪种情况。\n\n### 环境文件夹：改了怎么生效\n\n执行端每 5 分钟读一次 `~/.config/amber-executor/envs/`，有变化就重新登记到 Amber：\n\n| 文件夹里的变化 | 结果 |\n|---|---|\n| 新放进一个文件 | 新增环境，**要管理员批准**（批准前这个执行端的所有环境暂停） |\n| 改了已有文件里的路径、环境变量、Python | **直接生效**，Amber 给管理员发变化通知卡：新增和去掉了哪些路径，新增的凭证路径标红，卡上可以直接撤销这个执行端 |\n| 改了已有文件里的 `workdir`、`source`、`realHome` | **要管理员批准** |\n| 删掉一个文件 | 去掉这个环境（只会缩小权限），**直接生效**，通知管理员 |\n| 文件损坏或校验不通过 | 保留它上一次的有效内容，在执行端日志里记一条，不登记变化 |\n\n变化只对之后派发的任务生效：已经在运行的脚本按开始时的权限跑完（最长到脚本超时，不超过 120 秒）。撤销执行端也一样：Amber 立刻停止派任务、不再接收结果、取消它还在进行的服务请求，但已经启动的脚本仍会跑到结束或超时。\n\n想马上生效，不等 5 分钟：`launchctl kickstart -k gui/$(id -u)/com.amber.executor`。等待批准期间文件又变了，新的申请里会带上最新内容。\n\n**跟随 botmux 机器人的配置**：机器人在 botmux 里的配置改了以后，**手工再跑一次导出命令**（上面安装第 3 步 b，`--out` 写回同一个文件），执行端会按上表自动处理；导出工具只有内容真的变了才会改写文件。可选：在导出命令后面加 `--install-launchd`，装成每 5 分钟自动导出一次的定时任务（`--uninstall-launchd` 移除）。\n\n执行端只认这个文件夹里的文件，不知道 botmux 的存在；`export-botmux-env.mjs` 是 botmux 的适配层，以后 botmux 能直接输出这个文件，就不需要它了。\n\n旧版本把环境记在 `config.json` 里，升级后执行端第一次启动会把它们原样搬进这个文件夹，内容不变，不需要重新批准。\n\n\n初始化时执行端会记下 Amber 的签名公钥，之后只接受这把钥匙签的任务。Amber 换了签名密钥时，执行端会拒绝所有任务；确认是 Amber 自己换的之后，重新运行 `init … --repin`。\n\n## 管理员\n\n- 收到「执行端申请登记」卡片时，**先和安装的人核对公钥指纹**，再看来源机器和各环境的目录是否合理，然后批准或拒绝。\n- 私聊 Amber 发「**执行端**」：列出所有执行端，包括状态、是否在线、最后在线时间。\n- 发「**撤销执行端 名称**」：立即撤销，之后不再给它派任务，正在等结果的任务立即失败。\n- **网站**：管理员在网站左侧会看到「执行端（管理员）」，能查看每个执行端的状态、是否在线、环境目录和公钥指纹，并在页面上批准、拒绝或撤销，效果和飞书卡片一样。其他人看不到这一栏。\n\n## 环境定义文件\n\n运行环境用一份 JSON 定义，放在执行端的 `envs/` 文件夹里；`env set`、`env import` 和 `export-botmux-env.mjs --out` 只是往这个文件夹写文件的几种方式，`env export` 打印某个环境的文件。格式的完整说明（字段、路径解析、规则优先级、强制拒绝、校验清单、怎么映射到沙箱）见 **[运行环境定义格式](environment-format.md)**。这是一份独立于 Amber 的格式，其他 agent 平台、沙箱都可以照着生成或使用。\n\n## 写应用（给 agent）\n\n在 `script` 里加 `env`，**不写任何路径**：\n\n```json\n\"script\": {\n  \"kind\": \"script\", \"lang\": \"python\",\n  \"env\": \"ledger-mac/结算助手\",\n  \"code\": \"import os\\nroot = os.environ['WORKDIR']\\n…\"\n}\n```\n\n- 脚本能访问的，就是这个环境能访问的；用绝对路径访问（当前目录是临时目录），`WORKDIR` 从环境变量取。\n- 要联网写 `\"network\": true`。要调用 Amber 上登记的服务（比如 data-mcp），照常写 `services`，见下一节。\n- 认领卡和审核文档的「执行位置」一行会列出这个环境能访问的路径。执行端还没批准时，也可以先提交草稿和审核，只是试运行会提示「还没有被管理员批准」。\n- 不知道有哪些环境时问用户；管理员私聊 Amber 发「执行端」，或在网站的执行端管理页查看。\n\n## 调用 Amber 上登记的服务\n\ndata-mcp 这类服务装在 Amber 那台机器上，只监听本机。执行端上的应用照样可以调用，**脚本写法和在 Amber 本机完全一样**：\n\n```python\nsvc = inp[\"services\"][\"data-mcp\"]\nreq = urllib.request.Request(f\"http://127.0.0.1:{svc['tcpPort']}/amber/query\",\n    data=json.dumps({\"sql\": SQL}).encode(),\n    headers={\"Authorization\": \"Amber \" + svc[\"tokens\"][0], \"Content-Type\": \"application/json\"})\n```\n\n怎么做到的：\n\n1. 执行端在本机 `127.0.0.1` 上为这次任务开一个端口，把输入里的 `tcpPort` 换成它；沙箱只允许脚本连这个端口（macOS 沙箱只能限制到「本机端口」或「任何地址」，所以必须这样转一手）。这个端口只接受带着这次任务的凭证、并且这张凭证还没用过的请求，所以本机其他进程连上来也用不了；最多 8 个连接，请求要在 30 秒内发完。\n2. 脚本的请求（路径、请求体、`Authorization`、`Content-Type`、`Accept` 头）由执行端加上自己的签名，原样转给 Amber 的 `/v1/executor/relay`。\n3. Amber 核对：请求来自这次任务派给的那个执行端、任务正在运行、应用声明了这个服务、调用次数没超过声明的 `calls`、这个服务允许执行端调用。通过后原样转给本机的服务，再把响应原样带回。Amber 不读请求和响应的内容；身份凭证照常由服务自己校验。任务一结束（出结果、超时、执行端被撤销），还没完成的服务请求会被取消。\n\n限制：\n\n- 只有管理员在 Amber 配置里为服务打开了 `\"executor\": true` 的才能调用（data-mcp 已打开）；没打开的，提交草稿时就拒绝。\n- 只支持 HTTP 的 GET / POST，请求最大 512KB，响应最大 4MB，单次 60 秒超时；不支持流式响应和 websocket。\n- 只提供 `tcpPort`，不提供 `unixSocket`。\n- 调用服务的应用仍然不能联网，查出来的数据只能输出到结果里。\n- 执行端和 Amber 之间是普通 HTTP，查询和结果明文经过内网，可能被同网段看到（和其他执行结果一样）。但改不了、也冒用不了：转发请求带执行端的签名和一次性随机数，只对这次任务有效；Amber 的响应带 Amber 的签名并绑定到这一次请求，执行端核对不通过就不交给脚本。\n\n## 安全边界\n\n- 管理员批准的是**一把公钥 + 一组目录**。没有私钥的人冒充不了执行端：每个请求都有签名，并且带时间戳和一次性随机数，旧请求重放无效。\n- Amber 和执行端之间走普通 HTTP。任务内容是加密的，密钥不会以明文经过网络。结果正文本身是明文，和网站、接口一样，只适合在内网使用。\n- 「遮盖密钥」只是把输出里**原样出现**的密钥值换成 `***`（执行端和 Amber 各做一次）。它拦不住脚本把密钥变形后输出，也拦不住开了联网的脚本把密钥或数据发出去；环境允许读的文件，脚本也可以原样打印出来。这些都要靠审核把关：看代码怎么用密钥，看联网和读写目录是否必要。\n- 执行端的私钥由运行它的系统用户保护，同一用户下的其他进程能读到，见上面「用哪个系统用户安装」。\n- 执行端只跑签名有效、规格哈希与审核版本一致的代码，访问范围是那个运行环境批准过的路径。批准环境时要看清每一条路径，特别是标出的凭证路径；审核应用时要看它选了哪个环境、代码怎么用这些数据。\n- 执行端以安装它的那个系统用户运行。不要用有特殊权限的账号安装。\n\n## nginx\n\n执行端用的是 `/v1/executor/…` 接口，和 agent 接口走同一个 `location /v1/`，不用另外配置。结果最大约 256KB，建议把 `client_max_body_size` 调到 `1m`。\n","nav":[{"name":"quickstart","title":"快速上手","group":"使用手册/业务开发人员","current":false},{"name":"chat","title":"Amber 机器人对话","group":"使用手册/业务开发人员","current":false},{"name":"with-agent","title":"和自己的 agent 协作","group":"使用手册/业务开发人员","current":false},{"name":"web","title":"网站操作","group":"使用手册/业务开发人员","current":false},{"name":"scenarios","title":"主要场景的实现方式","group":"使用手册/业务开发人员","current":false},{"name":"sharing","title":"应用的分享","group":"使用手册/业务开发人员","current":false},{"name":"faq","title":"常见问题","group":"使用手册/业务开发人员","current":false},{"name":"review","title":"审核指南","group":"使用手册/审核人员","current":false},{"name":"admin","title":"管理员手册","group":"使用手册/系统管理员","current":false},{"name":"install","title":"安装与部署","group":"安装运维","current":false},{"name":"feishu-setup","title":"飞书应用配置","group":"安装运维","current":false},{"name":"executor","title":"执行端与运行环境","group":"安装运维","current":true},{"name":"concepts","title":"概念模型","group":"概念模型与开发参考","current":false},{"name":"script","title":"脚本约定","group":"概念模型与开发参考","current":false},{"name":"cli-and-skill","title":"agent 接入：命令行、skill 与接口","group":"概念模型与开发参考","current":false},{"name":"identity","title":"可信身份","group":"概念模型与开发参考","current":false},{"name":"identity-example","title":"可信身份：完整示例","group":"概念模型与开发参考","current":false},{"name":"environment-format","title":"运行环境定义格式","group":"概念模型与开发参考","current":false},{"name":"usage","title":"使用指南（已拆分）","group":"","current":false}]};
 const REPO = 'https://github.com/xu4wang/amber/blob/main/';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Same anchor rule as GitHub, so links written for the repo keep working here.
@@ -121,6 +186,21 @@ doc.querySelectorAll('a[href]').forEach(a => {
   else if (/^\.\.\//.test(h)) { a.setAttribute('href', REPO + h.replace(/^\.\.\//, '')); a.target = '_blank'; a.rel = 'noopener'; }
   else if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
 });
+// Diagrams (assets/*.svg) are inlined so they take the page's light / dark colours.
+doc.querySelectorAll('img').forEach(async img => {
+  if (!/^assets\/[a-z0-9-]+\.svg$/.test(img.getAttribute('src') || '')) return;
+  try {
+    const r = await fetch(img.src);
+    if (!r.ok) return;
+    const box = document.createElement('div');
+    box.className = 'diagram';
+    box.innerHTML = DOMPurify.sanitize(await r.text(), { USE_PROFILES: { svg: true } });
+    const svg = box.querySelector('svg');
+    if (!svg) return;
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    img.replaceWith(box);
+  } catch {}
+});
 const toc = [];
 doc.querySelectorAll('h2, h3').forEach(h => { h.id = slug(h.textContent); if (h.tagName === 'H2') toc.push(h); });
 if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
@@ -129,13 +209,66 @@ if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
 });
 
 const cur = DATA.nav.find(n => n.current);
-document.getElementById('nav').innerHTML =
-  '<div class="group">使用</div>' + DATA.nav.slice(0, 2).map(n => link(n)).join('') +
-  '<div class="group">进阶</div>' + DATA.nav.slice(2).map(n => link(n)).join('');
+// Nav groups are "section/subgroup"; a page without a group stays out of the nav.
+// Each section folds. On every load only the section of the current page is open.
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const curSection = cur && cur.group ? cur.group.split('/')[0] : null;
+let navHtml = '', lastSection = null, lastSub = null;
+for (const n of DATA.nav) {
+  if (!n.group) continue;
+  const [section, sub] = n.group.split('/');
+  if (section !== lastSection) {
+    if (lastSection !== null) navHtml += '</details>';
+    const open = section === curSection;
+    navHtml += `<details class="sec" data-sec="${esc(section)}"${open ? ' open' : ''}><summary>${esc(section)}</summary>`;
+    lastSection = section; lastSub = null;
+  }
+  if (sub && sub !== lastSub) { navHtml += `<div class="group">${esc(sub)}</div>`; lastSub = sub; }
+  navHtml += link(n);
+}
+if (lastSection !== null) navHtml += '</details>';
+const nav = document.getElementById('nav');
+nav.innerHTML = navHtml;
+
+// The whole menu: hidden or shown on a wide screen (remembered), opened on demand on a phone.
+const btn = document.getElementById('navbtn');
+const phone = matchMedia('(max-width: 860px)');
+if (store.get('amber-docs-nav-hidden')) document.body.classList.add('nav-hidden');
+const shown = () => phone.matches ? document.body.classList.contains('nav-open') : !document.body.classList.contains('nav-hidden');
+const sync = () => btn.setAttribute('aria-expanded', String(shown()));
+btn.addEventListener('click', () => {
+  if (phone.matches) document.body.classList.toggle('nav-open');
+  else { document.body.classList.toggle('nav-hidden'); store.set('amber-docs-nav-hidden', document.body.classList.contains('nav-hidden')); }
+  sync();
+});
+phone.addEventListener('change', sync);
+nav.addEventListener('click', e => { if (phone.matches && e.target.closest('a')) document.body.classList.remove('nav-open'); });
+sync();
 function link(n) {
   const a = `<a href="${esc(n.name)}.html" class="${n.current ? 'cur' : ''}">${esc(n.title)}</a>`;
-  return n.current && toc.length ? a + '<div class="toc">' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('') + '</div>' : a;
+  return a;
 }
+// Light / dark: light unless this browser chose dark. Pages that draw with JS listen for "amber-theme".
+document.getElementById('themebtn').addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('amber-theme', dark ? 'dark' : 'light'); } catch {}
+  document.dispatchEvent(new Event('amber-theme'));
+});
+// This page's sections, in a column on the right; the one being read is highlighted.
+const tocEl = document.getElementById('toc');
+if (toc.length > 1) {
+  tocEl.innerHTML = '<div class="toc-title">本页目录</div>' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('');
+  const links = [...tocEl.querySelectorAll('a')];
+  const spy = () => {
+    let i = 0;
+    toc.forEach((h, k) => { if (h.getBoundingClientRect().top < 120) i = k; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) i = toc.length - 1;
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true });
+  spy();
+} else document.body.classList.add('no-toc');
 if (location.hash) { const t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView(); }
 </script>
 </body>

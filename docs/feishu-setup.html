@@ -2,21 +2,35 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>飞书应用配置 · Amber</title>
 <link rel="icon" href="../logo.svg">
+<script>try { if (localStorage.getItem('amber-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
 <script src="../vendor/marked.min.js"></script>
 <script src="../vendor/purify.min.js"></script>
 <script src="../vendor/highlight.min.js"></script>
 <style>
 :root {
+  /* Light (default). The dark palette below applies when <html data-theme="dark">. */
+  color-scheme: light;
+  --bg: #ffffff; --panel: #ffffff; --card: #f4f4f4; --ink: #151515; --body-ink: #2b2b2b; --muted: #6b6b6b; --muted-2: #8f8f8f; --line: #e4e4e4; --line-2: #d2d2d2;
+  --accent: #f2a23a; --accent-press: #b8620e; --accent-hover: #ffb34d; --accent-ink: #a85a0c; --accent-soft: rgba(242, 162, 58, 0.18); --on-accent: #181818; --focus: #f2a23a; --ok: #03904a; --warn: #d92d20; --info: #2f7fa3;
+  --chip: #f0f0f0; --hover: #f2f2f2; --code-bg: #f6f6f6;
+  --hl-kw: #cf222e; --hl-str: #0a7d33; --hl-num: #b35900; --hl-cmt: #6e7781; --hl-fn: #0550ae; --hl-meta: #8250df;
+  --dg-bg: #ffffff; --dg-card: #f7f7f7; --dg-line: #c9c9c9; --dg-ink: #151515; --dg-muted: #5f5f5f; --dg-accent: #e0891c;
+  --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+:root[data-theme="dark"] {
   /* Cinematic dark: near-black canvas, one scarce Amber accent (the logo's #F2A23A), white type at weight 500, sharp corners. */
   --bg: #181818; --panel: #181818; --card: #303030; --ink: #ffffff; --muted: #969696; --muted-2: #666666; --line: #303030;
   --accent: #f2a23a; --accent-press: #b8620e; --accent-soft: rgba(242, 162, 58, 0.16); --on-accent: #181818; --ok: #03904a; --warn: #f13a2c; --info: #4c98b9;
   --chip: #303030; --hover: #222222; --code-bg: #111111;
   --hl-kw: #ff7b72; --hl-str: #a5d6a7; --hl-num: #ffb74d; --hl-cmt: #7d7d7d; --hl-fn: #90caf9; --hl-meta: #e5c07b;
   --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  color-scheme: dark;
+  --body-ink: #d6d6d6; --line-2: #444444; --accent-hover: #ffb34d; --accent-ink: #f2a23a; --focus: #ffd27a;
+  --dg-bg: #181818; --dg-card: #262626; --dg-line: #4a4a4a; --dg-ink: #ffffff; --dg-muted: #a8a8a8; --dg-accent: #f2a23a;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.75 "PingFang SC", "Noto Sans SC", system-ui, sans-serif; }
@@ -24,22 +38,21 @@ header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; bord
 header img { width: 28px; height: 28px; border-radius: 7px; }
 header .brand { font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
 header .back { margin-left: auto; color: var(--muted); font-size: 14px; text-decoration: none; }
-header .back:hover { color: var(--accent); }
+header .back:hover { color: var(--accent-ink); }
 header .gh { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; text-decoration: none; margin-left: 16px; }
-header .gh:hover { color: var(--accent); }
+header .gh:hover { color: var(--accent-ink); }
 header .gh svg { width: 18px; height: 18px; fill: currentColor; }
-.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr) 200px; max-width: 1400px; margin: 0 auto; }
 nav { padding: 24px 12px; border-right: 1px solid var(--line); font-size: 14px; position: sticky; top: 49px; align-self: start; max-height: calc(100vh - 49px); overflow: auto; }
 nav .group { color: var(--muted); font-size: 12px; margin: 14px 8px 4px; }
 nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
 nav a:hover { background: var(--accent-soft); }
-nav a.cur { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-nav .toc a { padding-left: 20px; color: var(--muted); font-size: 13px; }
+nav a.cur { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
 article { padding: 24px 40px 80px; min-width: 0; }
 article h1 { font-size: 28px; margin: 8px 0 16px; }
 article h2 { font-size: 21px; margin: 36px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
 article h3 { font-size: 17px; margin: 24px 0 8px; }
-article a { color: var(--accent); }
+article a { color: var(--accent-ink); }
 article table { border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
 article th, article td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
 article th { background: var(--panel); }
@@ -57,7 +70,6 @@ article blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid v
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   nav { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 12px; }
-  nav .toc { display: none; }
   article { padding: 16px 16px 60px; }
 }
 
@@ -73,39 +85,92 @@ nav .group { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; text-tran
 nav a { border-radius: 0; border-left: 2px solid transparent; color: var(--muted); }
 nav a:hover { background: none; color: var(--ink); }
 nav a.cur { background: none; color: var(--ink); font-weight: 600; border-left-color: var(--accent); }
-nav .toc a { color: var(--muted-2); }
-nav .toc a:hover { color: var(--ink); }
-article { padding: 48px 56px 128px; color: #d6d6d6; }
+article { padding: 48px 56px 128px; color: var(--body-ink); }
 article h1 { font-size: 56px; font-weight: 500; letter-spacing: -1.12px; line-height: 1.1; color: var(--ink); margin: 8px 0 32px; }
 article h2 { font-size: 26px; font-weight: 500; letter-spacing: 0.2px; color: var(--ink); border-top: 1px solid var(--line); margin: 64px 0 16px; padding-top: 32px; }
 article h3 { font-size: 18px; font-weight: 500; color: var(--ink); }
 article strong { color: var(--ink); font-weight: 600; }
 article a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
-article a:hover { color: var(--accent); }
+article a:hover { color: var(--accent-ink); }
 article table { font-size: 14px; }
 article th { background: var(--card); color: var(--ink); font-weight: 600; }
-article th, article td { border-color: #3a3a3a; }
+article th, article td { border-color: var(--line-2); }
 article code { background: var(--card); border-radius: 0; color: var(--ink); }
 article pre { background: var(--code-bg); border: none; border-radius: 0; }
 article pre code { background: none; }
-article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: #d6d6d6; padding: 12px 20px; }
+article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: var(--body-ink); padding: 12px 20px; }
 article hr { border: none; border-top: 1px solid var(--line); }
+article img { display: block; max-width: 100%; height: auto; margin: 24px 0; }
+article .diagram { margin: 24px 0; }
+article .diagram svg { display: block; width: 100%; max-width: 960px; height: auto; }
 @media (max-width: 860px) { article { padding: 24px 16px 64px; } article h1 { font-size: 32px; } }
+
+/* ---- Collapsible menu: sections fold, and the whole menu can be hidden ---- */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-left: -8px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; }
+.navbtn:hover, .navbtn:focus-visible { color: var(--ink); border-color: var(--line); outline: none; }
+.navbtn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+nav details.sec { margin: 0; }
+nav details.sec + details.sec { margin-top: 12px; }
+nav details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 10px 4px; padding: 6px 0; border-bottom: 1px solid var(--line); user-select: none; }
+nav details.sec > summary::-webkit-details-marker { display: none; }
+nav details.sec > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; margin-right: 4px; }
+nav details.sec[open] > summary::after { transform: rotate(45deg); }
+nav details.sec > summary:hover::after { border-color: var(--ink); }
+nav details.sec > summary:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+nav details.sec .group:first-of-type { margin-top: 12px; }
+body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr) 200px; max-width: 1180px; }
+/* This page's sections, on the right. */
+aside#toc { position: sticky; top: 65px; align-self: start; max-height: calc(100vh - 65px); overflow: auto; padding: 48px 16px 32px 0; font-size: 13px; }
+aside#toc .toc-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted-2); margin: 0 0 10px 12px; }
+aside#toc a { display: block; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; line-height: 1.5; }
+aside#toc a:hover { color: var(--ink); }
+aside#toc a.on { color: var(--ink); border-left-color: var(--accent); }
+body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+body.no-toc aside#toc { display: none; }
+@media (max-width: 1180px) {
+  .layout, body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+  body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+  aside#toc { display: none; }
+}
+@media (max-width: 860px) {
+  .layout, body.no-toc .layout, body.nav-hidden .layout, body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); }
+}
+body.nav-hidden nav { display: none; }
+@media (max-width: 860px) {
+  /* On a phone the menu starts hidden; the button opens it above the page. */
+  body:not(.nav-open) nav { display: none; }
+  body.nav-hidden.nav-open nav { display: block; }
+  header { gap: 8px; padding: 0 12px; }
+  header > span { display: none; }
+  header .back, header .gh { white-space: nowrap; }
+  header .gh { margin-left: 4px; }
+}
+
+/* ---- Light / dark switch ---- */
+.themebtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; letter-spacing: 0; }
+.themebtn:hover, .themebtn:focus-visible { background: none; color: var(--ink); border-color: var(--line); outline: none; }
+.themebtn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.themebtn .i-sun, :root[data-theme="dark"] .themebtn .i-moon { display: none; }
+:root[data-theme="dark"] .themebtn .i-sun { display: inline; }
 </style>
 </head>
 <body>
 <header>
+  <button class="navbtn" id="navbtn" type="button" aria-controls="nav" aria-expanded="true" title="收起 / 展开目录"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
   <img src="../logo.svg" alt="">
   <a class="brand" href="../">Amber</a><span style="color:var(--muted)">文档</span>
   <a class="back" href="../">▶ 视频手册</a>
+  <button class="themebtn" id="themebtn" type="button" title="切换浅色 / 深色"><svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg><svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M4 16l1.4-1.4M14.6 5.4 16 4"/></svg></button>
   <a class="gh" href="https://github.com/xu4wang/amber" target="_blank" rel="noopener" title="GitHub 仓库"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
 </header>
 <div class="layout">
   <nav id="nav"></nav>
   <article id="doc"></article>
+  <aside id="toc" aria-label="本页目录"></aside>
 </div>
 <script>
-const DATA = {"md":"# 飞书应用配置\n\nAmber 需要一个**自建应用**，通过它来收消息、发卡片、查用户、发起审批、写知识库文档。\n\n所有事件都走**长连接**，飞书不用回调你的服务器，所以 Amber 部署在内网也没问题。网站登录也不走飞书 OAuth，用的是私聊 Amber 拿一次性链接（见 [identity.md](identity.md#网站登录)），因此**不需要配置任何回调地址或重定向地址**。\n\n## 1. 创建应用\n\n1. 在[飞书开放平台](https://open.feishu.cn/app)创建企业自建应用，名称例如「Amber」，图标可以用 `web/logo.svg`。\n2. 「添加应用能力」里开启**机器人**。\n3. 在「凭证与基础信息」里拿到 App ID 和 App Secret，写进 `~/.config/amber/lark-app.env`（见 [install.md](install.md#31-lark-appenv飞书应用凭证权限设为-0600)）。**Secret 不要发到聊天里**，如果泄露了就在这里重置。\n\n> ⚠️ **一个飞书应用只能连一套 Amber。** 新搭测试实例、灾备实例时，**必须新建一个飞书应用**，不要复用已有 Amber 的 App ID/Secret。长连接会把消息和卡片点击随机分给同时在线的各个连接：两套服务共用一个应用时，原来那套会随机收不到消息、点了卡片没反应，而且不会报错，很难排查。\n\n## 2. 权限\n\n在「权限管理」里开通下表中的权限。下面列的都是范围最小的选项；如果飞书报错里提示了几个可选权限，任选其一即可。\n\n| 功能 | 权限 | 用途 |\n|---|---|---|\n| 收消息 | `im:message.p2p_msg:readonly` | 接收私聊消息 |\n| | `im:message.group_at_msg:readonly` | 接收群里 @Amber 的消息 |\n| 发消息 | `im:message:send_as_bot` | 以机器人身份发送、回复卡片 |\n| | `im:message:update` | 原地更新卡片（执行结果、审批状态） |\n| 群信息 | `im:chat:read`（或 `im:chat.group_info:readonly`） | 判断是群还是私聊，读取群名 |\n| | `im:chat.members:read` | 判断某人是否在群里：定时任务创建人退群后自动暂停；网站只显示本人所在群的应用 |\n| 通讯录 | `contact:user.id:readonly` | 通过邮箱查用户（管理员、审核人、私聊草稿的认领人、`--user`） |\n| | `contact:user.base:readonly` | 读取姓名（卡片、网站显示用） |\n| | `contact:user.employee:readonly` | 读取办公城市（参数可以默认取「执行人的办公城市」） |\n| 审批 | `approval:instance` | 发起审批、查询审批状态 |\n| | `approval:definition` | 读取审批定义 |\n| 知识库 | `wiki:node:create` | 在知识库里新建审核文档 |\n| | `wiki:space:retrieve` | 读取知识库空间 |\n| 文档 | `docx:document.block:convert` | 把 Markdown 转成文档内容 |\n| | `docx:document:write_only` | 写入文档内容（代码、试运行结果、审批记录） |\n\n缺权限的影响：\n\n- 没有 `im:chat.members:read`：网站上看不到群应用，也不能执行群应用（Amber 宁可拒绝也不放行）；定时任务不再检查创建人是否还在群里。\n- 没有审批和知识库的权限：退回到用卡片上的「通过 / 驳回」按钮审核。\n\n## 3. 事件与回调\n\n在「事件与回调」里：\n\n1. 订阅方式选**使用长连接接收**（事件和回调两处都要选）。\n2. 添加事件 `im.message.receive_v1`（接收消息）。\n3. 添加回调 `card.action.trigger`（卡片回传交互）。**只把回调的订阅方式切成长连接还不够**，要在回调配置页下方的「已订阅的回调」列表里**看到 `card.action.trigger` 这一行**才算配好。漏了这一步，帮助卡片照样能发，但认领、试运行、执行、审核等所有按钮一点就提示「该应用尚未配置卡片回调」，而 Amber 日志里什么也收不到。\n   - 保存「使用长连接接收」时，飞书会检查这个应用当前有没有长连接在线。所以**先把 Amber 启动起来再保存**，否则会提示检测不到连接。\n4. 可选：添加审批事件「审批实例状态变更」。实测长连接收不到这个事件，所以 Amber 每 60 秒主动查一次待审批的实例；配不配这项都不影响结果。\n\n## 4. 审批定义\n\n在飞书「审批管理后台」新建一个审批，名称例如「Amber 应用上线」：\n\n- **表单**：放一个「多行文本」控件，Amber 会在里面写入应用摘要和文档链接。\n- **流程**：一个审批节点，审批人选**发起人自选**，多人审批方式选**会签**（所有人同意才通过）。审批人由 Amber 发起审批时按 `reviewers` 名单指定。\n- 「可见范围 / 发起人」要包含认领应用的人：审批以认领人的名义发起。\n\n建好后，从审批定义的链接里拿到 `approval_code`，再用接口查出节点 id 和控件 id：\n\n```sh\nset -a; . ~/.config/amber/lark-app.env; set +a\nT=$(curl -s -X POST https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal \\\n  -H 'Content-Type: application/json' \\\n  -d \"{\\\"app_id\\\":\\\"$AMBER_LARK_APP_ID\\\",\\\"app_secret\\\":\\\"$AMBER_LARK_APP_SECRET\\\"}\" | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"tenant_access_token\"])')\ncurl -s \"https://open.feishu.cn/open-apis/approval/v4/approvals/\u003capproval_code>\" -H \"Authorization: Bearer $T\" \\\n  | python3 -c 'import json,sys;d=json.load(sys.stdin)[\"data\"];print(\"nodes:\",[(n[\"name\"],n[\"node_id\"]) for n in d[\"node_list\"]]);print(\"form:\",[(f[\"name\"],f[\"id\"],f[\"type\"]) for f in json.loads(d[\"form\"])])'\n```\n\n把结果填进 `config.json` 的 `approval`：\n\n- `reviewNodeId`：审批节点的 `node_id`。不要填「提交」和「结束」节点。\n- `formFieldId`：多行文本控件（`textarea`）的 `id`。\n\n审批结果以接口查询为准：Amber 会重新读取审批实例，确认**每一位审核人都同意**、应用定义的哈希也没有变化，才让应用生效。\n\n## 5. 知识库\n\n1. 新建一个知识空间，例如「Amber 应用库」，在里面建一个父页面，审核文档都放在它下面。\n2. 把 **Amber 应用添加为知识空间成员，权限为可编辑**。\n3. 把空间开放给需要看代码的人（审核人至少要能看）。\n4. 填写 `config.json` 的 `wiki`：\n   - `parentNodeToken`：父页面链接 `…/wiki/\u003ctoken>` 里的 token；\n   - `spaceId`：用 `GET /open-apis/wiki/v2/spaces/get_node?token=\u003c父页面 token>` 查，返回结果里的 `space_id`；\n   - `baseUrl`：你们租户的知识库链接前缀，例如 `https://xxx.feishu.cn/wiki/`。\n\n每提交一次审核，Amber 就新建一篇文档「Amber 应用：\u003c名称>（\u003c版本哈希前 8 位>）」，内容包括说明、参数、完整代码和试运行输出，审批结果出来后会追加到文档末尾。\n\n## 6. 发布\n\n1. 「版本管理与发布」→ 创建版本。**可用范围**要包含所有会用 Amber 的人：不在范围内的人收不到私聊，也点不了卡片。\n2. 提交发布。如果企业要求管理员审核，要等审核通过。\n\n**每次新增权限或事件之后，都要重新创建版本并发布才会生效。**这是最常见的「明明加了权限还报错」的原因。\n\n## 7. 检查清单\n\n| 检查 | 期望 |\n|---|---|\n| 私聊 Amber 发「帮助」 | 回复应用列表卡片 |\n| 把 Amber 拉进群，@Amber 发「帮助」 | 回复本群的应用列表 |\n| 私聊 Amber 发「登录」 | 回复带「打开 Amber 网站」按钮的卡片 |\n| 在任意卡片上点一个按钮（比如帮助卡片里的「选择」，或认领卡上的「试运行」；新装还没有应用时帮助卡片里没有按钮，就用认领卡） | 卡片有响应。提示「该应用尚未配置卡片回调」时，回到第 3 节检查「已订阅的回调」里有没有 `card.action.trigger`，然后重新发布 |\n| 提交一份草稿，认领、试运行、提交审核 | 知识库里出现文档，飞书审批里出现待办（没配审批时改为卡片上的「通过 / 驳回」按钮） |\n| 日志里有 `member check unavailable` | 说明缺 `im:chat.members:read`，或者 Amber 不在那个群里 |\n| 日志里有 `admin email not resolved`、`admins resolved N of M`（N 小于 M） | 某个管理员的邮箱查不到人：核对邮箱拼写，以及这个人是否在应用的可用范围内 |\n| 日志里有 `admin email lookup failed` | 整批查询失败，通常是缺 `contact:user.id:readonly` 权限，或者加了权限还没重新发布 |\n| 日志里有 `REVIEW DISABLED`，或 `reviewers resolved 0` | 审核人有邮箱查不到（或者根本没配审核人），提交审核会被拒绝：原因和上面两条一样 |\n| 日志里有错误码 `99991672` | 应用缺权限。错误信息里会列出缺的是哪一项，按第 2 节补上并重新发布 |\n","nav":[{"name":"usage","title":"使用指南","current":false},{"name":"sharing","title":"应用的分享","current":false},{"name":"cli-and-skill","title":"amber 命令行与 skill","current":false},{"name":"executor","title":"执行端","current":false},{"name":"environment-format","title":"运行环境定义格式","current":false},{"name":"identity","title":"可信身份","current":false},{"name":"identity-example","title":"可信身份：完整示例","current":false},{"name":"install","title":"安装与部署","current":false},{"name":"feishu-setup","title":"飞书应用配置","current":true}]};
+const DATA = {"md":"# 飞书应用配置\n\nAmber 需要一个**自建应用**，通过它来收消息、发卡片、查用户、发起审批、写知识库文档。\n\n所有事件都走**长连接**，飞书不用回调你的服务器，所以 Amber 部署在内网也没问题。网站登录也不走飞书 OAuth，用的是私聊 Amber 拿一次性链接（见 [identity.md](identity.md#2-网站登录)），因此**不需要配置任何回调地址或重定向地址**。\n\n## 1. 创建应用\n\n1. 在[飞书开放平台](https://open.feishu.cn/app)创建企业自建应用，名称例如「Amber」，图标可以用 `web/logo.svg`。\n2. 「添加应用能力」里开启**机器人**。\n3. 在「凭证与基础信息」里拿到 App ID 和 App Secret，写进 `~/.config/amber/lark-app.env`（见 [install.md](install.md#31-lark-appenv飞书应用凭证权限设为-0600)）。**Secret 不要发到聊天里**，如果泄露了就在这里重置。\n\n> ⚠️ **一个飞书应用只能连一套 Amber。** 新搭测试实例、灾备实例时，**必须新建一个飞书应用**，不要复用已有 Amber 的 App ID/Secret。长连接会把消息和卡片点击随机分给同时在线的各个连接：两套服务共用一个应用时，原来那套会随机收不到消息、点了卡片没反应，而且不会报错，很难排查。\n\n## 2. 权限\n\n在「权限管理」里开通下表中的权限。下面列的都是范围最小的选项；如果飞书报错里提示了几个可选权限，任选其一即可。\n\n| 功能 | 权限 | 用途 |\n|---|---|---|\n| 收消息 | `im:message.p2p_msg:readonly` | 接收私聊消息 |\n| | `im:message.group_at_msg:readonly` | 接收群里 @Amber 的消息 |\n| 发消息 | `im:message:send_as_bot` | 以机器人身份发送、回复卡片 |\n| | `im:message:update` | 原地更新卡片（执行结果、审批状态） |\n| 群信息 | `im:chat:read`（或 `im:chat.group_info:readonly`） | 判断是群还是私聊，读取群名 |\n| | `im:chat.members:read` | 判断某人是否在群里：定时任务创建人退群后自动暂停；网站只显示本人所在群的应用 |\n| 通讯录 | `contact:user.id:readonly` | 通过邮箱查用户（管理员、审核人、私聊草稿的认领人、`--user`） |\n| | `contact:user.base:readonly` | 读取姓名（卡片、网站显示用） |\n| | `contact:user.employee:readonly` | 读取办公城市（参数可以默认取「执行人的办公城市」） |\n| 审批 | `approval:instance` | 发起审批、查询审批状态 |\n| | `approval:definition` | 读取审批定义 |\n| 知识库 | `wiki:node:create` | 在知识库里新建审核文档 |\n| | `wiki:space:retrieve` | 读取知识库空间 |\n| 文档 | `docx:document.block:convert` | 把 Markdown 转成文档内容 |\n| | `docx:document:write_only` | 写入文档内容（代码、试运行结果、审批记录） |\n\n缺权限的影响：\n\n- 没有 `im:chat.members:read`：网站上看不到群应用，也不能执行群应用（Amber 宁可拒绝也不放行）；定时任务不再检查创建人是否还在群里。\n- 没有审批和知识库的权限：退回到用卡片上的「通过 / 驳回」按钮审核。\n\n## 3. 事件与回调\n\n在「事件与回调」里：\n\n1. 订阅方式选**使用长连接接收**（事件和回调两处都要选）。\n2. 添加事件 `im.message.receive_v1`（接收消息）。\n3. 添加回调 `card.action.trigger`（卡片回传交互）。**只把回调的订阅方式切成长连接还不够**，要在回调配置页下方的「已订阅的回调」列表里**看到 `card.action.trigger` 这一行**才算配好。漏了这一步，帮助卡片照样能发，但认领、试运行、执行、审核等所有按钮一点就提示「该应用尚未配置卡片回调」，而 Amber 日志里什么也收不到。\n   - 保存「使用长连接接收」时，飞书会检查这个应用当前有没有长连接在线。所以**先把 Amber 启动起来再保存**，否则会提示检测不到连接。\n4. 可选：添加审批事件「审批实例状态变更」。实测长连接收不到这个事件，所以 Amber 每 60 秒主动查一次待审批的实例；配不配这项都不影响结果。\n\n## 4. 审批定义\n\n在飞书「审批管理后台」新建一个审批，名称例如「Amber 应用上线」：\n\n- **表单**：放一个「多行文本」控件，Amber 会在里面写入应用摘要和文档链接。\n- **流程**：一个审批节点，审批人选**发起人自选**，多人审批方式选**会签**（所有人同意才通过）。审批人由 Amber 发起审批时按 `reviewers` 名单指定。\n- 「可见范围 / 发起人」要包含认领应用的人：审批以认领人的名义发起。\n\n建好后，从审批定义的链接里拿到 `approval_code`，再用接口查出节点 id 和控件 id：\n\n```sh\nset -a; . ~/.config/amber/lark-app.env; set +a\nT=$(curl -s -X POST https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal \\\n  -H 'Content-Type: application/json' \\\n  -d \"{\\\"app_id\\\":\\\"$AMBER_LARK_APP_ID\\\",\\\"app_secret\\\":\\\"$AMBER_LARK_APP_SECRET\\\"}\" | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"tenant_access_token\"])')\ncurl -s \"https://open.feishu.cn/open-apis/approval/v4/approvals/\u003capproval_code>\" -H \"Authorization: Bearer $T\" \\\n  | python3 -c 'import json,sys;d=json.load(sys.stdin)[\"data\"];print(\"nodes:\",[(n[\"name\"],n[\"node_id\"]) for n in d[\"node_list\"]]);print(\"form:\",[(f[\"name\"],f[\"id\"],f[\"type\"]) for f in json.loads(d[\"form\"])])'\n```\n\n把结果填进 `config.json` 的 `approval`：\n\n- `reviewNodeId`：审批节点的 `node_id`。不要填「提交」和「结束」节点。\n- `formFieldId`：多行文本控件（`textarea`）的 `id`。\n\n审批结果以接口查询为准：Amber 会重新读取审批实例，确认**每一位审核人都同意**、应用定义的哈希也没有变化，才让应用生效。\n\n## 5. 知识库\n\n1. 新建一个知识空间，例如「Amber 应用库」，在里面建一个父页面，审核文档都放在它下面。\n2. 把 **Amber 应用添加为知识空间成员，权限为可编辑**。\n3. 把空间开放给需要看代码的人（审核人至少要能看）。\n4. 填写 `config.json` 的 `wiki`：\n   - `parentNodeToken`：父页面链接 `…/wiki/\u003ctoken>` 里的 token；\n   - `spaceId`：用 `GET /open-apis/wiki/v2/spaces/get_node?token=\u003c父页面 token>` 查，返回结果里的 `space_id`；\n   - `baseUrl`：你们租户的知识库链接前缀，例如 `https://xxx.feishu.cn/wiki/`。\n\n每提交一次审核，Amber 就新建一篇文档「Amber 应用：\u003c名称>（\u003c版本哈希前 8 位>）」，内容包括说明、参数、完整代码和试运行输出，审批结果出来后会追加到文档末尾。\n\n## 6. 发布\n\n1. 「版本管理与发布」→ 创建版本。**可用范围**要包含所有会用 Amber 的人：不在范围内的人收不到私聊，也点不了卡片。\n2. 提交发布。如果企业要求管理员审核，要等审核通过。\n\n**每次新增权限或事件之后，都要重新创建版本并发布才会生效。**这是最常见的「明明加了权限还报错」的原因。\n\n## 7. 检查清单\n\n| 检查 | 期望 |\n|---|---|\n| 私聊 Amber 发「帮助」 | 回复应用列表卡片 |\n| 把 Amber 拉进群，@Amber 发「帮助」 | 回复本群的应用列表 |\n| 私聊 Amber 发「登录」 | 回复带「打开 Amber 网站」按钮的卡片 |\n| 在任意卡片上点一个按钮（比如帮助卡片里的「选择」，或认领卡上的「试运行」；新装还没有应用时帮助卡片里没有按钮，就用认领卡） | 卡片有响应。提示「该应用尚未配置卡片回调」时，回到第 3 节检查「已订阅的回调」里有没有 `card.action.trigger`，然后重新发布 |\n| 提交一份草稿，认领、试运行、提交审核 | 知识库里出现文档，飞书审批里出现待办（没配审批时改为卡片上的「通过 / 驳回」按钮） |\n| 日志里有 `member check unavailable` | 说明缺 `im:chat.members:read`，或者 Amber 不在那个群里 |\n| 日志里有 `admin email not resolved`、`admins resolved N of M`（N 小于 M） | 某个管理员的邮箱查不到人：核对邮箱拼写，以及这个人是否在应用的可用范围内 |\n| 日志里有 `admin email lookup failed` | 整批查询失败，通常是缺 `contact:user.id:readonly` 权限，或者加了权限还没重新发布 |\n| 日志里有 `REVIEW DISABLED`，或 `reviewers resolved 0` | 审核人有邮箱查不到（或者根本没配审核人），提交审核会被拒绝：原因和上面两条一样 |\n| 日志里有错误码 `99991672` | 应用缺权限。错误信息里会列出缺的是哪一项，按第 2 节补上并重新发布 |\n","nav":[{"name":"quickstart","title":"快速上手","group":"使用手册/业务开发人员","current":false},{"name":"chat","title":"Amber 机器人对话","group":"使用手册/业务开发人员","current":false},{"name":"with-agent","title":"和自己的 agent 协作","group":"使用手册/业务开发人员","current":false},{"name":"web","title":"网站操作","group":"使用手册/业务开发人员","current":false},{"name":"scenarios","title":"主要场景的实现方式","group":"使用手册/业务开发人员","current":false},{"name":"sharing","title":"应用的分享","group":"使用手册/业务开发人员","current":false},{"name":"faq","title":"常见问题","group":"使用手册/业务开发人员","current":false},{"name":"review","title":"审核指南","group":"使用手册/审核人员","current":false},{"name":"admin","title":"管理员手册","group":"使用手册/系统管理员","current":false},{"name":"install","title":"安装与部署","group":"安装运维","current":false},{"name":"feishu-setup","title":"飞书应用配置","group":"安装运维","current":true},{"name":"executor","title":"执行端与运行环境","group":"安装运维","current":false},{"name":"concepts","title":"概念模型","group":"概念模型与开发参考","current":false},{"name":"script","title":"脚本约定","group":"概念模型与开发参考","current":false},{"name":"cli-and-skill","title":"agent 接入：命令行、skill 与接口","group":"概念模型与开发参考","current":false},{"name":"identity","title":"可信身份","group":"概念模型与开发参考","current":false},{"name":"identity-example","title":"可信身份：完整示例","group":"概念模型与开发参考","current":false},{"name":"environment-format","title":"运行环境定义格式","group":"概念模型与开发参考","current":false},{"name":"usage","title":"使用指南（已拆分）","group":"","current":false}]};
 const REPO = 'https://github.com/xu4wang/amber/blob/main/';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Same anchor rule as GitHub, so links written for the repo keep working here.
@@ -121,6 +186,21 @@ doc.querySelectorAll('a[href]').forEach(a => {
   else if (/^\.\.\//.test(h)) { a.setAttribute('href', REPO + h.replace(/^\.\.\//, '')); a.target = '_blank'; a.rel = 'noopener'; }
   else if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
 });
+// Diagrams (assets/*.svg) are inlined so they take the page's light / dark colours.
+doc.querySelectorAll('img').forEach(async img => {
+  if (!/^assets\/[a-z0-9-]+\.svg$/.test(img.getAttribute('src') || '')) return;
+  try {
+    const r = await fetch(img.src);
+    if (!r.ok) return;
+    const box = document.createElement('div');
+    box.className = 'diagram';
+    box.innerHTML = DOMPurify.sanitize(await r.text(), { USE_PROFILES: { svg: true } });
+    const svg = box.querySelector('svg');
+    if (!svg) return;
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    img.replaceWith(box);
+  } catch {}
+});
 const toc = [];
 doc.querySelectorAll('h2, h3').forEach(h => { h.id = slug(h.textContent); if (h.tagName === 'H2') toc.push(h); });
 if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
@@ -129,13 +209,66 @@ if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
 });
 
 const cur = DATA.nav.find(n => n.current);
-document.getElementById('nav').innerHTML =
-  '<div class="group">使用</div>' + DATA.nav.slice(0, 2).map(n => link(n)).join('') +
-  '<div class="group">进阶</div>' + DATA.nav.slice(2).map(n => link(n)).join('');
+// Nav groups are "section/subgroup"; a page without a group stays out of the nav.
+// Each section folds. On every load only the section of the current page is open.
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const curSection = cur && cur.group ? cur.group.split('/')[0] : null;
+let navHtml = '', lastSection = null, lastSub = null;
+for (const n of DATA.nav) {
+  if (!n.group) continue;
+  const [section, sub] = n.group.split('/');
+  if (section !== lastSection) {
+    if (lastSection !== null) navHtml += '</details>';
+    const open = section === curSection;
+    navHtml += `<details class="sec" data-sec="${esc(section)}"${open ? ' open' : ''}><summary>${esc(section)}</summary>`;
+    lastSection = section; lastSub = null;
+  }
+  if (sub && sub !== lastSub) { navHtml += `<div class="group">${esc(sub)}</div>`; lastSub = sub; }
+  navHtml += link(n);
+}
+if (lastSection !== null) navHtml += '</details>';
+const nav = document.getElementById('nav');
+nav.innerHTML = navHtml;
+
+// The whole menu: hidden or shown on a wide screen (remembered), opened on demand on a phone.
+const btn = document.getElementById('navbtn');
+const phone = matchMedia('(max-width: 860px)');
+if (store.get('amber-docs-nav-hidden')) document.body.classList.add('nav-hidden');
+const shown = () => phone.matches ? document.body.classList.contains('nav-open') : !document.body.classList.contains('nav-hidden');
+const sync = () => btn.setAttribute('aria-expanded', String(shown()));
+btn.addEventListener('click', () => {
+  if (phone.matches) document.body.classList.toggle('nav-open');
+  else { document.body.classList.toggle('nav-hidden'); store.set('amber-docs-nav-hidden', document.body.classList.contains('nav-hidden')); }
+  sync();
+});
+phone.addEventListener('change', sync);
+nav.addEventListener('click', e => { if (phone.matches && e.target.closest('a')) document.body.classList.remove('nav-open'); });
+sync();
 function link(n) {
   const a = `<a href="${esc(n.name)}.html" class="${n.current ? 'cur' : ''}">${esc(n.title)}</a>`;
-  return n.current && toc.length ? a + '<div class="toc">' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('') + '</div>' : a;
+  return a;
 }
+// Light / dark: light unless this browser chose dark. Pages that draw with JS listen for "amber-theme".
+document.getElementById('themebtn').addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('amber-theme', dark ? 'dark' : 'light'); } catch {}
+  document.dispatchEvent(new Event('amber-theme'));
+});
+// This page's sections, in a column on the right; the one being read is highlighted.
+const tocEl = document.getElementById('toc');
+if (toc.length > 1) {
+  tocEl.innerHTML = '<div class="toc-title">本页目录</div>' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('');
+  const links = [...tocEl.querySelectorAll('a')];
+  const spy = () => {
+    let i = 0;
+    toc.forEach((h, k) => { if (h.getBoundingClientRect().top < 120) i = k; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) i = toc.length - 1;
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true });
+  spy();
+} else document.body.classList.add('no-toc');
 if (location.hash) { const t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView(); }
 </script>
 </body>
