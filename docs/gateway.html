@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>外网网关 · Amber</title>
+<link rel="icon" href="../logo.svg">
+<script>try { if (localStorage.getItem('amber-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
+<script src="../vendor/marked.min.js"></script>
+<script src="../vendor/purify.min.js"></script>
+<script src="../vendor/highlight.min.js"></script>
+<style>
+:root {
+  /* Light (default). The dark palette below applies when <html data-theme="dark">. */
+  color-scheme: light;
+  --bg: #ffffff; --panel: #ffffff; --card: #f4f4f4; --ink: #151515; --body-ink: #2b2b2b; --muted: #6b6b6b; --muted-2: #8f8f8f; --line: #e4e4e4; --line-2: #d2d2d2;
+  --accent: #f2a23a; --accent-press: #b8620e; --accent-hover: #ffb34d; --accent-ink: #a85a0c; --accent-soft: rgba(242, 162, 58, 0.18); --on-accent: #181818; --focus: #f2a23a; --ok: #03904a; --warn: #d92d20; --info: #2f7fa3;
+  --chip: #f0f0f0; --hover: #f2f2f2; --code-bg: #f6f6f6;
+  --hl-kw: #cf222e; --hl-str: #0a7d33; --hl-num: #b35900; --hl-cmt: #6e7781; --hl-fn: #0550ae; --hl-meta: #8250df;
+  --dg-bg: #ffffff; --dg-card: #f7f7f7; --dg-line: #c9c9c9; --dg-ink: #151515; --dg-muted: #5f5f5f; --dg-accent: #e0891c;
+  --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+:root[data-theme="dark"] {
+  /* Cinematic dark: near-black canvas, one scarce Amber accent (the logo's #F2A23A), white type at weight 500, sharp corners. */
+  --bg: #181818; --panel: #181818; --card: #303030; --ink: #ffffff; --muted: #969696; --muted-2: #666666; --line: #303030;
+  --accent: #f2a23a; --accent-press: #b8620e; --accent-soft: rgba(242, 162, 58, 0.16); --on-accent: #181818; --ok: #03904a; --warn: #f13a2c; --info: #4c98b9;
+  --chip: #303030; --hover: #222222; --code-bg: #111111;
+  --hl-kw: #ff7b72; --hl-str: #a5d6a7; --hl-num: #ffb74d; --hl-cmt: #7d7d7d; --hl-fn: #90caf9; --hl-meta: #e5c07b;
+  --font: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  color-scheme: dark;
+  --body-ink: #d6d6d6; --line-2: #444444; --accent-hover: #ffb34d; --accent-ink: #f2a23a; --focus: #ffd27a;
+  --dg-bg: #181818; --dg-card: #262626; --dg-line: #4a4a4a; --dg-ink: #ffffff; --dg-muted: #a8a8a8; --dg-accent: #f2a23a;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.75 "PingFang SC", "Noto Sans SC", system-ui, sans-serif; }
+header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 1; }
+header img { width: 28px; height: 28px; border-radius: 7px; }
+header .brand { font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; }
+header .back { margin-left: auto; color: var(--muted); font-size: 14px; text-decoration: none; }
+header .back:hover { color: var(--accent-ink); }
+header .gh { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; text-decoration: none; margin-left: 16px; }
+header .gh:hover { color: var(--accent-ink); }
+header .gh svg { width: 18px; height: 18px; fill: currentColor; }
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr) 200px; max-width: 1400px; margin: 0 auto; }
+nav { padding: 24px 12px; border-right: 1px solid var(--line); font-size: 14px; position: sticky; top: 49px; align-self: start; max-height: calc(100vh - 49px); overflow: auto; }
+nav .group { color: var(--muted); font-size: 12px; margin: 14px 8px 4px; }
+nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+nav a:hover { background: var(--accent-soft); }
+nav a.cur { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+article { padding: 24px 40px 80px; min-width: 0; }
+article h1 { font-size: 28px; margin: 8px 0 16px; }
+article h2 { font-size: 21px; margin: 36px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+article h3 { font-size: 17px; margin: 24px 0 8px; }
+article a { color: var(--accent-ink); }
+article table { border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
+article th, article td { border: 1px solid var(--line); padding: 6px 12px; text-align: left; vertical-align: top; }
+article th { background: var(--panel); }
+article td:first-child { min-width: 5.5em; }
+article code { font-family: ui-monospace, Menlo, monospace; font-size: 0.88em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+article pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow: auto; line-height: 1.55; }
+article pre code { background: none; padding: 0; font-size: 13px; }
+article blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid var(--accent); color: var(--muted); background: var(--panel); }
+.hljs-keyword, .hljs-built_in, .hljs-literal { color: var(--hl-kw); font-weight: 600; }
+.hljs-string, .hljs-regexp { color: var(--hl-str); }
+.hljs-number { color: var(--hl-num); }
+.hljs-comment { color: var(--hl-cmt); font-style: italic; }
+.hljs-title, .hljs-title.function_, .hljs-title.class_ { color: var(--hl-fn); }
+.hljs-meta, .hljs-attr, .hljs-name, .hljs-tag { color: var(--hl-meta); }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); padding: 12px; }
+  article { padding: 16px 16px 60px; }
+}
+
+/* ---- Ferrari-inspired overrides ---- */
+body { font-family: var(--font); font-size: 15px; }
+header { height: 64px; padding: 0 24px; }
+header img { border-radius: 0; }
+header .brand { font-weight: 500; font-size: 15px; letter-spacing: 1.4px; text-transform: uppercase; }
+header .back, header .gh { font-size: 12px; font-weight: 600; letter-spacing: 0.65px; text-transform: uppercase; }
+header .back:hover, header .gh:hover { color: var(--ink); }
+nav { top: 65px; max-height: calc(100vh - 65px); padding: 32px 12px; }
+nav .group { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase; color: var(--muted-2); margin: 20px 10px 6px; }
+nav a { border-radius: 0; border-left: 2px solid transparent; color: var(--muted); }
+nav a:hover { background: none; color: var(--ink); }
+nav a.cur { background: none; color: var(--ink); font-weight: 600; border-left-color: var(--accent); }
+article { padding: 48px 56px 128px; color: var(--body-ink); }
+article h1 { font-size: 56px; font-weight: 500; letter-spacing: -1.12px; line-height: 1.1; color: var(--ink); margin: 8px 0 32px; }
+article h2 { font-size: 26px; font-weight: 500; letter-spacing: 0.2px; color: var(--ink); border-top: 1px solid var(--line); margin: 64px 0 16px; padding-top: 32px; }
+article h3 { font-size: 18px; font-weight: 500; color: var(--ink); }
+article strong { color: var(--ink); font-weight: 600; }
+article a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+article a:hover { color: var(--accent-ink); }
+article table { font-size: 14px; }
+article th { background: var(--card); color: var(--ink); font-weight: 600; }
+article th, article td { border-color: var(--line-2); }
+article code { background: var(--card); border-radius: 0; color: var(--ink); }
+article pre { background: var(--code-bg); border: none; border-radius: 0; }
+article pre code { background: none; }
+article blockquote { border-left: 2px solid var(--accent); background: var(--card); color: var(--body-ink); padding: 12px 20px; }
+article hr { border: none; border-top: 1px solid var(--line); }
+article img { display: block; max-width: 100%; height: auto; margin: 24px 0; }
+article .diagram { margin: 24px 0; }
+article .diagram svg { display: block; width: 100%; max-width: 960px; height: auto; }
+@media (max-width: 860px) { article { padding: 24px 16px 64px; } article h1 { font-size: 32px; } }
+
+/* ---- Collapsible menu: sections fold, and the whole menu can be hidden ---- */
+.navbtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-left: -8px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; }
+.navbtn:hover, .navbtn:focus-visible { color: var(--ink); border-color: var(--line); outline: none; }
+.navbtn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+nav details.sec { margin: 0; }
+nav details.sec + details.sec { margin-top: 12px; }
+nav details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 10px 4px; padding: 6px 0; border-bottom: 1px solid var(--line); user-select: none; }
+nav details.sec > summary::-webkit-details-marker { display: none; }
+nav details.sec > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; margin-right: 4px; }
+nav details.sec[open] > summary::after { transform: rotate(45deg); }
+nav details.sec > summary:hover::after { border-color: var(--ink); }
+nav details.sec > summary:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+nav details.sec .group:first-of-type { margin-top: 12px; }
+body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr) 200px; max-width: 1180px; }
+/* This page's sections, on the right. */
+aside#toc { position: sticky; top: 65px; align-self: start; max-height: calc(100vh - 65px); overflow: auto; padding: 48px 16px 32px 0; font-size: 13px; }
+aside#toc .toc-title { font-size: 11px; font-weight: 600; letter-spacing: 1.1px; color: var(--muted-2); margin: 0 0 10px 12px; }
+aside#toc a { display: block; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; line-height: 1.5; }
+aside#toc a:hover { color: var(--ink); }
+aside#toc a.on { color: var(--ink); border-left-color: var(--accent); }
+body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+body.no-toc aside#toc { display: none; }
+@media (max-width: 1180px) {
+  .layout, body.no-toc .layout { grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; }
+  body.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
+  aside#toc { display: none; }
+}
+@media (max-width: 860px) {
+  .layout, body.no-toc .layout, body.nav-hidden .layout, body.no-toc.nav-hidden .layout { grid-template-columns: minmax(0, 1fr); }
+}
+body.nav-hidden nav { display: none; }
+@media (max-width: 860px) {
+  /* On a phone the menu starts hidden; the button opens it above the page. */
+  body:not(.nav-open) nav { display: none; }
+  body.nav-hidden.nav-open nav { display: block; }
+  header { gap: 8px; padding: 0 12px; }
+  header > span { display: none; }
+  header .back, header .gh { white-space: nowrap; }
+  header .gh { margin-left: 4px; }
+}
+
+/* ---- Light / dark switch ---- */
+.themebtn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; letter-spacing: 0; }
+.themebtn:hover, .themebtn:focus-visible { background: none; color: var(--ink); border-color: var(--line); outline: none; }
+.themebtn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.themebtn .i-sun, :root[data-theme="dark"] .themebtn .i-moon { display: none; }
+:root[data-theme="dark"] .themebtn .i-sun { display: inline; }
+</style>
+</head>
+<body>
+<header>
+  <button class="navbtn" id="navbtn" type="button" aria-controls="nav" aria-expanded="true" title="收起 / 展开目录"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
+  <img src="../logo.svg" alt="">
+  <a class="brand" href="../">Amber</a><span style="color:var(--muted)">文档</span>
+  <a class="back" href="../">▶ 视频手册</a>
+  <button class="themebtn" id="themebtn" type="button" title="切换浅色 / 深色"><svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9z"/></svg><svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M4 16l1.4-1.4M14.6 5.4 16 4"/></svg></button>
+  <a class="gh" href="https://github.com/xu4wang/amber" target="_blank" rel="noopener" title="GitHub 仓库"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <article id="doc"></article>
+  <aside id="toc" aria-label="本页目录"></aside>
+</div>
+<script>
+const DATA = {"md":"# 外网网关（amber-gateway）\n\nAmber 部署在公司内网里，它的接口只对白名单里的机器开放（按 IP 认机器，见[安装与部署](install.md)）。公司网络外的调用方——比如豆包工作里的 skill、外网服务器上的 agent——连不到它。\n\n**外网网关**是装在一台外网服务器上的小服务，对外提供和 Amber **完全相同的接口路径**（`/v1/...`）。调用方带上网关发的令牌把请求发给网关；Amber 从内网**主动连出去**，把排队的请求取回来，像处理自己接口收到的请求一样处理，再把答复送回网关，网关交给调用方。公司网络不需要开放任何入站端口。\n\n```\n外网调用方 ──HTTPS + 令牌──▶ 网关（外网服务器） ◀──HTTPS，Amber 签名── Amber（内网）\n                                 排队 / 回答              取请求 / 送答复\n```\n\n和[链接模式的执行端](executor.md#linux-与链接模式amber-主动连过来)用的是同一套连接方式（Amber 签名的长轮询，可固定证书）。\n\n## 信任模型\n\n| 谁 | 信任谁 | 凭什么 |\n|---|---|---|\n| 网关 | 调用方 | 每个调用方（客户端）一个令牌，请求头 `Authorization: Bearer \u003c令牌>`。网关只存令牌的哈希 |\n| 网关 | Amber | `init` 时记下 Amber 的签名公钥；取请求、送答复的每个请求都要有 Amber 为这个网关名签的名，过期或重放的拒绝 |\n| Amber | 网关 | 只连自己配置里的地址（可固定证书）。网关在每个请求上注明是哪个客户端，Amber 认这个名字 |\n| Amber | 调用方 | **不直接信任**。每个客户端能做什么由 Amber 管理员在配置里写明（见下面「Amber 这边的配置」），默认什么都不能代表 |\n\n要点：\n\n- **令牌不会到 Amber**。网关只把 `content-type` 头和请求正文转给 Amber，`Authorization`、Cookie、代理头都不转。\n- **网关能看到经过它的请求和答复正文**（比如直接执行的应用的输出、应用列表）。所以网关所在的机器、以及做 HTTPS 终结的那一层（nginx、caddy，或者 CDN）**必须是可信的**。中间有 CDN 时它也能看到明文，可以让 Amber 用 `connectTo` + `tlsFingerprint` 绕开 CDN 直连网关。`amber read` 的结果是加密给调用方自己的一次性密钥的，网关看不到内容。\n- 拿到网关签名公钥以外的东西都不能冒充 Amber：别人取不走排队的请求，也不能伪造答复。\n- 拿到一个客户端令牌的人，能做的不超过这个客户端在 Amber 配置里被允许的范围；发现泄漏就 `token rm`，立即失效。\n- 在 Amber 看来，经网关来的请求来自机器 `gw:\u003c网关名>:\u003c客户端名>`。审计日志、`/v1/info` 里都是这个名字；查请求状态、取 `amber read` 结果时，只能查到这个客户端自己发起的。\n\n## 安装（Linux）\n\n要求：Node 22 或更新版本，不需要安装依赖；一个外网能访问的 HTTPS 地址。网关不需要能访问 Amber。\n\n```bash\n# 1. 专门的系统用户；代码只要 client/amber-gateway 这个目录\nuseradd --system --create-home --shell /sbin/nologin amber-gw\nmkdir -p /opt/amber-gateway && cp -r ~/amber/client/amber-gateway/* /opt/amber-gateway/\nG=\"sudo -u amber-gw -H node /opt/amber-gateway/amber-gateway.mjs\"\n\n# 2. 初始化。Amber 的签名公钥：向 Amber 管理员要 \u003cAmber 地址>/v1/keys 返回的 JSON，存成文件\n#    --name 是这个网关在 Amber 配置 apiLinks 里的名字；--rate 是每个客户端每分钟最多几个请求（默认 60）\n$G init --name doubao-gw --amber-key /tmp/amber-keys.json --listen 127.0.0.1:7360\n\n# 3. 给每个调用方发一个令牌（只显示一次）\n$G token add doubao-skill\n\n# 4. 查看状态\n$G status\n```\n\n配置在 `~/.config/amber-gateway/`（目录 700，`config.json` 600），审计日志是同一目录的 `audit.jsonl`。Amber 换了签名密钥时，网关会拒绝它的所有请求；确认是 Amber 自己换的之后，重新运行 `init … --repin`。\n\n**常驻运行（systemd）**，`/etc/systemd/system/amber-gateway.service`：\n\n```ini\n[Unit]\nDescription=Amber gateway\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nUser=amber-gw\nEnvironment=HOME=/home/amber-gw\nExecStart=/usr/bin/node /opt/amber-gateway/amber-gateway.mjs serve\nRestart=always\nRestartSec=5\nNoNewPrivileges=yes\n\n[Install]\nWantedBy=multi-user.target\n```\n\n```bash\nsystemctl daemon-reload && systemctl enable --now amber-gateway\njournalctl -u amber-gateway -f        # 日志：Amber 连上、出错\n```\n\n`serve` 默认只监听 `127.0.0.1:7360` 的明文 HTTP，可以用 `--host`、`--port` 改；**一定要在前面放 nginx 或 caddy 做 HTTPS**。\n\n**nginx**：`/v1/` 给调用方，`/amber-link/` 给 Amber，`/healthz` 给监控。读超时要比最长的请求长（`amber wait` 会挂起最多 65 秒）：\n\n```nginx\nlocation ~ ^/(v1|amber-link)/ {\n    proxy_pass http://127.0.0.1:7360;\n    proxy_http_version 1.1;\n    proxy_read_timeout 90s;\n    proxy_buffering off;\n    client_max_body_size 20m;\n}\nlocation = /healthz { proxy_pass http://127.0.0.1:7360; }\n```\n\n**caddy**（自动申请证书）：\n\n```\namber-gw.example.com {\n    reverse_proxy 127.0.0.1:7360 {\n        transport http {\n            read_timeout 90s\n        }\n    }\n}\n```\n\n`\u003c地址>/healthz` 返回 `{\"ok\": true, \"service\": \"amber-gateway\", \"name\": \"…\", \"amberConnected\": true}`：Amber 最近 60 秒内来取过请求就是 `true`。不含任何密钥或调用信息，可以给监控用。\n\n## 令牌管理\n\n```bash\n$G token add \u003c客户端名> [--rate \u003c每分钟次数>]   # 新令牌，只显示一次；--rate 单独给这个客户端设上限\n$G token list                                   # 客户端名和创建时间，不显示令牌\n$G token rm \u003c客户端名>                          # 立即失效，服务不用重启\n```\n\n- 客户端名：小写字母、数字、连字符，最长 32 个字符。它也是 Amber 配置里 `clients` 的键，两边要一致。\n- 网关只保存令牌的 SHA-256，令牌丢了不能找回，只能 `rm` 再 `add`。\n- 换令牌：`token rm` 再 `token add`，把新令牌交给调用方。\n\n## Amber 这边的配置\n\n管理员在 Amber 的 `config.json` 里加上，然后重启 Amber：\n\n```json\n\"apiLinks\": [\n  {\n    \"name\": \"doubao-gw\",\n    \"url\": \"https://amber-gw.example.com\",\n    \"clients\": {\n      \"doubao-skill\": {\n        \"users\": [\"zhangsan@example.com\"],\n        \"chats\": [\"oc_1234567890abcdef\"]\n      },\n      \"ops-bot\": {\n        \"paths\": [\"/v1/info\", \"/v1/commands/list\", \"/v1/runs\", \"/v1/schedules/list\"],\n        \"chats\": [\"oc_abcdef1234567890\"]\n      }\n    }\n  }\n]\n```\n\n- `name` 必须和网关 `init --name` 一致：网关只接受 Amber 为这个名字签的请求。\n- `url`、`connectTo`、`tlsFingerprint`、`parallel` 和 [`executorLinks`](executor.md#linux-与链接模式amber-主动连过来) 的含义相同。\n- `clients`：网关上的每个客户端，在这里写明它能做什么。**没写在这里的客户端，网关就算认它的令牌，Amber 也一律拒绝。** 每个客户端三项，都可以不写：\n\n| 设置 | 含义 | 不写时 |\n|---|---|---|\n| `paths` | 允许调用的接口路径，`:id` 表示任意一段（如 `/v1/schedules/:id/pause`） | 只能查看和执行：`/v1/info`、`/v1/keys`、`/v1/requests/:id`、`/v1/commands/list`、`/v1/commands/show`、`/v1/runs`、`/v1/reads`、`/v1/reads/fetch`。提交、下线应用，定时任务，触发器都要明确写上 |\n| `users` | 允许在请求里代表的人（邮箱，不分大小写），即 `--user` / 草稿的 `claimer` | **不能代表任何人** |\n| `chats` | 允许在请求里指定的会话（`chatId`，群或私聊的 `oc_…`） | **不能指定任何会话** |\n\n**不管怎么配都不开放**：`/v1/secrets/*`（读取应用密钥）、`/v1/executor/*`（执行端有自己的链接模式）、`/v1/pages`（发布页面）。网关和 Amber 两边都会拒绝。\n\n**为什么 `users`、`chats` 默认是「没有」**：内网机器可以在请求里写任何人、任何群，因为它们本来就在白名单里，而且 Amber 从不以 agent 自称的人的身份执行（要身份的操作都要那个人在飞书卡片上点）。但外网调用方如果能随便写一个群，就能列出那个群的应用、直接执行其中不需要身份的应用并拿到输出、往那个群里发确认卡片。所以外网调用方只能在管理员写明的会话里、以写明的人的名义发请求。几乎所有接口都要指定会话，所以一个客户端至少要配 `chats` 才有用；在群里使用可以不写 `users`（不指定人）；在私聊里使用（`chatType: p2p`，Amber 要求指明是谁）则要同时写上这个人和那个私聊会话的 `chatId`。\n\n请求状态（`/v1/requests/:id`）和 `amber read` 的结果只对发起它的客户端可见：别的机器、别的客户端发起的请求，查起来和不存在一样（请求号会出现在群里的卡片上，知道请求号不代表是自己的）。\n\nAmber 连上网关后日志里有 `api link doubao-gw connected`；断开时记录原因。每个经网关的请求在 Amber 的审计日志里记一条 `gateway.request`（网关、客户端、方法、路径、状态码，不含正文），网站审计页的分类是「外网网关」。\n\n## 调用方怎么用\n\n### amber 命令行\n\n和内网一样的命令，只是地址换成网关、再加上令牌：\n\n```bash\namber config set-url https://amber-gw.example.com\namber config set-token amg_xxxxxxxx…      # 或者环境变量 AMBER_TOKEN\namber info                                  # 本机名称显示为 gw:doubao-gw:doubao-skill\namber list --chat oc_1234567890abcdef --chat-type group\n```\n\n令牌只通过 `https` 发送（本机测试可以用 `http://127.0.0.1`）：地址是明文 http 时命令行直接报错，不会把令牌发出去。配置文件权限是 600。内网使用不需要令牌，不受影响。\n\n### 直接调接口（比如豆包 skill）\n\n请求格式和 Amber 的接口完全一样（见 [agent 接入](cli-and-skill.md)），加一个请求头：\n\n```bash\nTOKEN=amg_xxxxxxxx…\nGW=https://amber-gw.example.com\n\n# 这个会话里能用的应用\ncurl -sS \"$GW/v1/commands/list\" \\\n  -H \"Authorization: Bearer $TOKEN\" -H 'content-type: application/json' \\\n  -d '{\"chatId\": \"oc_1234567890abcdef\", \"chatType\": \"group\"}'\n\n# 执行一个应用：不需要身份的直接返回结果；需要身份的会在群里发确认卡片，返回 requestId\ncurl -sS \"$GW/v1/runs\" \\\n  -H \"Authorization: Bearer $TOKEN\" -H 'content-type: application/json' \\\n  -d '{\"chatId\": \"oc_1234567890abcdef\", \"chatType\": \"group\", \"user\": \"zhangsan@example.com\", \"command\": \"天气\", \"args\": {\"city\": \"上海\"}}'\n\n# 等确认卡片的结果（最多挂起 50 秒）\ncurl -sS \"$GW/v1/requests/\u003crequestId>?wait=30\" -H \"Authorization: Bearer $TOKEN\"\n```\n\n`GET /v1/keys`（Amber 的签名公钥，服务方验证执行身份凭证用）不需要令牌，由网关直接用 `init` 时记下的公钥回答。\n\n### 错误\n\n| 状态码 | 原因 |\n|---|---|\n| 401 | 没带令牌、令牌不对或已删除 |\n| 403 | Amber 不允许这个客户端这样做（接口、人、会话不在配置里，或者是不开放的接口），`message` 里说明了缺什么 |\n| 404 | 不是 Amber 的接口 |\n| 413 | 请求正文超过 1MB（Amber 自己对一般接口的上限是 256KB） |\n| 429 | 超过这个客户端每分钟的请求数，稍后再试 |\n| 503 | 网关排队的请求太多 |\n| 504 | Amber 没有连上网关，或者没在时限内答复（一般 60 秒；`?wait=` 的请求是等待时间加 15 秒） |\n\n## 审计\n\n网关的 `audit.jsonl` 每个外部请求一行：\n\n```json\n{\"time\": \"2026-11-04T08:00:00.000Z\", \"client\": \"doubao-skill\", \"method\": \"GET\", \"path\": \"/v1/requests/…?wait=30\", \"status\": 200, \"ms\": 31012}\n```\n\n只记时间、客户端（令牌不对时是 `null`）、方法、路径（查询参数只保留名字，`wait` 保留值）、状态码和耗时。**从不记录请求正文、令牌或答复内容。** 文件只追加不轮转，需要时用 logrotate 等外部工具处理。\n\n## 限制与已知缺口\n\n- **不开放**：读取密钥、执行端、发布页面（见上）。\n- **卡片上的 agent 名字**：调用方可以像内网 agent 一样用 `label` 给自己起名，确认卡片上显示这个名字，卡片不会标出请求来自外网。审计日志里的机器名 `gw:…` 是可信的，名字不是。\n- **一个网关对应一个 Amber**。每个网关可以有多个客户端；多个网关就在 `apiLinks` 里写多项。\n- 限流计数、排队的请求都在网关内存里：网关重启后限流重新计数，正在等待的请求会失败（调用方重试即可，Amber 那边已经开始执行的照常完成）。\n- 令牌错误的请求不限流（令牌是 256 位随机数，猜不到）；需要的话在 nginx 前面加限流。\n- 改 `apiLinks` 要重启 Amber。网关这边：删令牌、改单个客户端的上限（`config.json` 里 `clients.\u003c名字>.rate`）立即生效；`init --rate` 改的默认上限要重启网关才生效。\n- 网关状态目前只在日志里（`api link … connected / down`）和网关的 `/healthz`，管理员页面上还没有显示。\n","nav":[{"name":"quickstart","title":"快速上手","group":"使用手册/业务开发人员","current":false},{"name":"chat","title":"Amber 机器人对话","group":"使用手册/业务开发人员","current":false},{"name":"with-agent","title":"和自己的 agent 协作","group":"使用手册/业务开发人员","current":false},{"name":"web","title":"网站操作","group":"使用手册/业务开发人员","current":false},{"name":"scenarios","title":"主要场景的实现方式","group":"使用手册/业务开发人员","current":false},{"name":"pages","title":"页面应用","group":"使用手册/业务开发人员","current":false},{"name":"triggers","title":"触发器","group":"使用手册/业务开发人员","current":false},{"name":"lark-identity","title":"以你本人的飞书身份运行","group":"使用手册/业务开发人员","current":false},{"name":"sharing","title":"应用的分享","group":"使用手册/业务开发人员","current":false},{"name":"samples","title":"示例应用","group":"使用手册/业务开发人员","current":false},{"name":"faq","title":"常见问题","group":"使用手册/业务开发人员","current":false},{"name":"review","title":"审核指南","group":"使用手册/审核人员","current":false},{"name":"admin","title":"管理员手册","group":"使用手册/系统管理员","current":false},{"name":"install","title":"安装与部署","group":"安装运维","current":false},{"name":"feishu-setup","title":"飞书应用配置","group":"安装运维","current":false},{"name":"executor","title":"执行端与运行环境","group":"安装运维","current":false},{"name":"gateway","title":"外网网关","group":"安装运维","current":true},{"name":"concepts","title":"概念模型","group":"概念模型与开发参考","current":false},{"name":"script","title":"脚本约定","group":"概念模型与开发参考","current":false},{"name":"cli-and-skill","title":"agent 接入：命令行、skill 与接口","group":"概念模型与开发参考","current":false},{"name":"identity","title":"可信身份","group":"概念模型与开发参考","current":false},{"name":"identity-example","title":"可信身份：完整示例","group":"概念模型与开发参考","current":false},{"name":"environment-format","title":"运行环境定义格式","group":"概念模型与开发参考","current":false},{"name":"usage","title":"使用指南（已拆分）","group":"","current":false}]};
+const REPO = 'https://github.com/xu4wang/amber/blob/main/';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// Same anchor rule as GitHub, so links written for the repo keep working here.
+const slug = t => t.trim().toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
+
+const doc = document.getElementById('doc');
+doc.innerHTML = DOMPurify.sanitize(marked.parse(DATA.md));
+const names = new Set(DATA.nav.map(n => n.name));
+doc.querySelectorAll('a[href]').forEach(a => {
+  const h = a.getAttribute('href');
+  const m = /^([a-z-]+)\.md(#.*)?$/.exec(h);
+  if (m && names.has(m[1])) a.setAttribute('href', m[1] + '.html' + (m[2] || ''));
+  else if (/^\.\.\//.test(h)) { a.setAttribute('href', REPO + h.replace(/^\.\.\//, '')); a.target = '_blank'; a.rel = 'noopener'; }
+  else if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+});
+// Diagrams (assets/*.svg) are inlined so they take the page's light / dark colours.
+doc.querySelectorAll('img').forEach(async img => {
+  if (!/^assets\/[a-z0-9-]+\.svg$/.test(img.getAttribute('src') || '')) return;
+  try {
+    const r = await fetch(img.src);
+    if (!r.ok) return;
+    const box = document.createElement('div');
+    box.className = 'diagram';
+    box.innerHTML = DOMPurify.sanitize(await r.text(), { USE_PROFILES: { svg: true } });
+    const svg = box.querySelector('svg');
+    if (!svg) return;
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    img.replaceWith(box);
+  } catch {}
+});
+const toc = [];
+doc.querySelectorAll('h2, h3').forEach(h => { h.id = slug(h.textContent); if (h.tagName === 'H2') toc.push(h); });
+if (typeof hljs === 'object') doc.querySelectorAll('pre code').forEach(c => {
+  const lang = (c.className.match(/language-(\w+)/) || [])[1];
+  if (lang && hljs.getLanguage(lang)) hljs.highlightElement(c);
+});
+
+const cur = DATA.nav.find(n => n.current);
+// Nav groups are "section/subgroup"; a page without a group stays out of the nav.
+// Each section folds. On every load only the section of the current page is open.
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const curSection = cur && cur.group ? cur.group.split('/')[0] : null;
+let navHtml = '', lastSection = null, lastSub = null;
+for (const n of DATA.nav) {
+  if (!n.group) continue;
+  const [section, sub] = n.group.split('/');
+  if (section !== lastSection) {
+    if (lastSection !== null) navHtml += '</details>';
+    const open = section === curSection;
+    navHtml += `<details class="sec" data-sec="${esc(section)}"${open ? ' open' : ''}><summary>${esc(section)}</summary>`;
+    lastSection = section; lastSub = null;
+  }
+  if (sub && sub !== lastSub) { navHtml += `<div class="group">${esc(sub)}</div>`; lastSub = sub; }
+  navHtml += link(n);
+}
+if (lastSection !== null) navHtml += '</details>';
+const nav = document.getElementById('nav');
+nav.innerHTML = navHtml;
+
+// The whole menu: hidden or shown on a wide screen (remembered), opened on demand on a phone.
+const btn = document.getElementById('navbtn');
+const phone = matchMedia('(max-width: 860px)');
+if (store.get('amber-docs-nav-hidden')) document.body.classList.add('nav-hidden');
+const shown = () => phone.matches ? document.body.classList.contains('nav-open') : !document.body.classList.contains('nav-hidden');
+const sync = () => btn.setAttribute('aria-expanded', String(shown()));
+btn.addEventListener('click', () => {
+  if (phone.matches) document.body.classList.toggle('nav-open');
+  else { document.body.classList.toggle('nav-hidden'); store.set('amber-docs-nav-hidden', document.body.classList.contains('nav-hidden')); }
+  sync();
+});
+phone.addEventListener('change', sync);
+nav.addEventListener('click', e => { if (phone.matches && e.target.closest('a')) document.body.classList.remove('nav-open'); });
+sync();
+function link(n) {
+  const a = `<a href="${esc(n.name)}.html" class="${n.current ? 'cur' : ''}">${esc(n.title)}</a>`;
+  return a;
+}
+// Light / dark: light unless this browser chose dark. Pages that draw with JS listen for "amber-theme".
+document.getElementById('themebtn').addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme !== 'dark';
+  if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('amber-theme', dark ? 'dark' : 'light'); } catch {}
+  document.dispatchEvent(new Event('amber-theme'));
+});
+// This page's sections, in a column on the right; the one being read is highlighted.
+const tocEl = document.getElementById('toc');
+if (toc.length > 1) {
+  tocEl.innerHTML = '<div class="toc-title">本页目录</div>' + toc.map(h => `<a href="#${esc(h.id)}">${esc(h.textContent)}</a>`).join('');
+  const links = [...tocEl.querySelectorAll('a')];
+  const spy = () => {
+    let i = 0;
+    toc.forEach((h, k) => { if (h.getBoundingClientRect().top < 120) i = k; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) i = toc.length - 1;
+    links.forEach((a, k) => a.classList.toggle('on', k === i));
+  };
+  addEventListener('scroll', spy, { passive: true });
+  spy();
+} else document.body.classList.add('no-toc');
+if (location.hash) { const t = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView(); }
+</script>
+</body>
+</html>
